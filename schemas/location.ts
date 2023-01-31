@@ -1,8 +1,25 @@
-import {defineField, defineType} from 'sanity'
+import {defineField, defineType, ObjectDefinition} from 'sanity'
 import ObjectField from '../components/ObjectField'
 import ObjectInput from '../components/ObjectInput'
 import ObjectItem from '../components/ObjectItem'
 import ObjectPreview from '../components/ObjectPreview'
+
+/**
+ * Components for "Alias" types are not type checked as strictly as those loaded
+ * directly on built-in schema types like `object` and `array`
+ * 
+ * In this example we have registered an `object` field type as an alias called `coordinate`
+ * 
+ * For strict type checking in these aliases we need to add this IntrinsicDefinitions
+ * using the same name as the type alias
+ */
+declare module 'sanity' {
+  export interface IntrinsicDefinitions {
+    coordinate: Omit<ObjectDefinition, 'type' | 'fields' | 'options'> & {
+      type: 'coordinate'
+    }
+  }
+}
 
 export default defineType({
   name: 'location',
@@ -19,14 +36,16 @@ export default defineType({
       type: 'coordinate',
       description: 'Default input',
     }),
-    defineField({
-      name: 'coordinatesField',
-      type: 'coordinate',
-      description: 'Custom "field" component',
-      components: {
-        field: ObjectField,
+    defineField(
+      {
+        name: 'coordinatesField',
+        type: 'coordinate',
+        description: 'Custom "field" component',
+        components: {
+          field: ObjectField,
+        },
       },
-    }),
+    ),
     defineField({
       name: 'coordinatesInput',
       type: 'coordinate',

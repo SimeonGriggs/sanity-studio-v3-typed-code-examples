@@ -3,14 +3,14 @@ import {ObjectItemProps} from 'sanity'
 import {Card, Stack, Code} from '@sanity/ui'
 
 type ObjectValue = {
-  _type: string
   _key: string
+  _type?: string
   x?: number
   y?: number
 }
 
 export default function ObjectItem(props: ObjectItemProps<ObjectValue>) {
-  console.log(props)
+// console.log(props)
   return (
     <Card tone="primary">
       <Stack space={2}>

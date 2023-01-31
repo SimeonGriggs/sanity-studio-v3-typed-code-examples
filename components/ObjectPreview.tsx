@@ -10,7 +10,7 @@ type ObjectValue = {
 }
 
 export default function ObjectPreview(props: PreviewProps<'default'>) {
-  console.log(props)
+  // console.log(props)
   return (
     <Card tone="primary">
       <Stack space={2}>

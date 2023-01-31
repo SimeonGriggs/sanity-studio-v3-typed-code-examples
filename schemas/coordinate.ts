@@ -1,8 +1,8 @@
 import {defineField, defineType} from 'sanity'
-import ObjectField from '../components/ObjectField'
-import ObjectInput from '../components/ObjectInput'
-import ObjectItem from '../components/ObjectItem'
-import ObjectPreview from '../components/ObjectPreview'
+// import ObjectField from '../components/ObjectField'
+// import ObjectInput from '../components/ObjectInput'
+// import ObjectItem from '../components/ObjectItem'
+// import ObjectPreview from '../components/ObjectPreview'
 
 export default defineType({
   name: 'coordinate',
@@ -21,18 +21,21 @@ export default defineType({
     defineField({
       name: 'x',
       type: 'number',
-      fieldset: 'coordinates'
+      fieldset: 'coordinates',
     }),
     defineField({
       name: 'y',
       type: 'number',
-      fieldset: 'coordinates'
+      fieldset: 'coordinates',
     }),
   ],
-  components: {
-    field: ObjectField,
-    input: ObjectInput,
-    item: ObjectItem,
-    preview: ObjectPreview,
-  }
+  // Components loaded here in an `object` type schema are strictly type checked
+  // If loaded from an alias – like {type: 'coordinate'} – they are typed `any`
+  // ...unless we perform additional work with IntrinsicDefinitions
+  // components: {
+  //   field: ObjectField,
+  //   input: ObjectInput,
+  //   item: ObjectItem,
+  //   preview: ObjectPreview,
+  // },
 })
