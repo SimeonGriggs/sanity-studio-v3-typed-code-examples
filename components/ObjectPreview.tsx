@@ -21,7 +21,7 @@ export default function ObjectPreview(props: PreviewProps) {
         <Code>ObjectPreview</Code>
         <Flex align="center" gap={2}>
           <Box flex={1}>{props.renderDefault(props)}</Box>
-          {/* These values *do* exist and come from the schema */}
+          {/* These values *do* exist because we added them in the schema */}
           {/* But there's currently no way to Type them */}
           {/* {props?.x ? <Code>x:{props.x}</Code> : null} */}
           {/* {props?.y ? <Code>y:{props.y}</Code> : null} */}
