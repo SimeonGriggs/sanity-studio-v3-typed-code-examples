@@ -5,13 +5,16 @@ import ObjectItem from '../components/ObjectItem'
 import ObjectPreview from '../components/ObjectPreview'
 
 /**
- * Components for "Alias" types are not type checked as strictly as those loaded
+ * Components for "Alias" schema types are not type checked as strictly as those loaded
  * directly on built-in schema types like `object` and `array`
- * 
- * In this example we have registered an `object` field type as an alias called `coordinate`
- * 
- * For strict type checking in these aliases we need to add this IntrinsicDefinitions
- * using the same name as the type alias
+ *
+ * In this example we have registered an `object` field type 
+ * as an alias schema type called `coordinate`
+ *
+ * For strict TypeScript checking in these schema type aliases we need to add this
+ * IntrinsicDefinitions below using the same name as the schema type alias
+ *
+ * BEWARE: It's possible that re-declaring this module could cause issues
  */
 declare module 'sanity' {
   export interface IntrinsicDefinitions {
@@ -32,21 +35,22 @@ export default defineType({
       type: 'string',
     }),
     defineField({
+      hidden: true,
       name: 'coordinates',
       type: 'coordinate',
       description: 'Default input',
     }),
-    defineField(
-      {
-        name: 'coordinatesField',
-        type: 'coordinate',
-        description: 'Custom "field" component',
-        components: {
-          field: ObjectField,
-        },
-      },
-    ),
     defineField({
+      hidden: true,
+      name: 'coordinatesField',
+      type: 'coordinate',
+      description: 'Custom "field" component',
+      components: {
+        field: ObjectField,
+      },
+    }),
+    defineField({
+      hidden: true,
       name: 'coordinatesInput',
       type: 'coordinate',
       description: 'Custom "input" component',
@@ -55,6 +59,7 @@ export default defineType({
       },
     }),
     defineField({
+      hidden: true,
       name: 'coordinatesItemArray',
       description: 'Array of custom "item" components',
       type: 'array',
