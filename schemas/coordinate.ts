@@ -1,13 +1,16 @@
 import {defineField, defineType} from 'sanity'
+import {PinIcon} from '@sanity/icons'
 // import ObjectField from '../components/ObjectField'
 // import ObjectInput from '../components/ObjectInput'
 // import ObjectItem from '../components/ObjectItem'
-import ObjectPreview from '../components/ObjectPreview'
+// import ObjectPreview from '../components/ObjectPreview'
+import ObjectPreviewRetyped from '../components/ObjectPreviewRetyped'
 
 export default defineType({
   name: 'coordinate',
   title: 'Coordinate',
   type: 'object',
+  icon: PinIcon,
   fieldsets: [
     {
       name: 'coordinates',
@@ -32,7 +35,7 @@ export default defineType({
   // To pass values from the field into components.preview
   // We must setup the `preview` key on the schema
   // This can only be done here on the `object`,
-  // and not customised where used as a schema type alias
+  // and not customized where used as a schema type alias
   preview: {
     select: {
       x: 'x',
@@ -43,20 +46,27 @@ export default defineType({
         // The built-in preview will be looking for `title`, `subtitle` and `media`
         title: x && y ? `x: ${x}, y: ${y}` : 'Boot coordinates not yet set',
         subtitle: 'The Coordinate',
-        // But you can pass-in any arbitrary data as well 
+        media: PinIcon,
+        // ...but you can pass-in any arbitrary data as well 
         // and access it in your custom preview component
+        // but TypeScript won't be expecting them in PreviewProps
+        // see `ObjectPreviewRetyped.tsx` for a workaround
         x,
         y,
       }
     }
   },
-  // Components loaded here in an `object` type schema are strictly type checked
+  // 1. Components loaded here in an `object` type schema are strictly type checked
   // If loaded from an schema type alias – like {type: 'coordinate'} – they are typed `any`
   // ...unless we perform additional work with IntrinsicDefinitions
+
+  // 2. If a component is loaded from an alias schema type, 
+  // it will override the component here
   // components: {
     // field: ObjectField,
     // input: ObjectInput,
     // item: ObjectItem,
     // preview: ObjectPreview,
+    // preview: ObjectPreviewRetyped,
   // },
 })
