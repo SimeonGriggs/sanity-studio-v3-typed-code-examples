@@ -1,5 +1,5 @@
 import React from 'react'
-import {PreviewProps, typed} from 'sanity'
+import {PreviewProps} from 'sanity'
 import {Stack, Card, Code, Flex, Box} from '@sanity/ui'
 
 /**
@@ -19,9 +19,9 @@ type ArbitraryPreviewProps = PreviewProps & {
 export default function ObjectPreviewRetyped(props: PreviewProps) {
   // It has no onChange handler
 
-  // In this component we're customising the PreviewProps
-  // to include the abitrary values we added in the schema
-  const castProps = typed<ArbitraryPreviewProps>(props)
+  // In this component we're customizing the PreviewProps
+  // to include the arbitrary values we added in the schema
+  const castProps = props as ArbitraryPreviewProps
 
   return (
     <Card tone="primary">

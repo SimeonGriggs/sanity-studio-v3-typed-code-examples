@@ -4,7 +4,7 @@ import {PinIcon} from '@sanity/icons'
 // import ObjectInput from '../components/ObjectInput'
 // import ObjectItem from '../components/ObjectItem'
 // import ObjectPreview from '../components/ObjectPreview'
-import ObjectPreviewRetyped from '../components/ObjectPreviewRetyped'
+// import ObjectPreviewRetyped from '../components/ObjectPreviewRetyped'
 
 export default defineType({
   name: 'coordinate',
@@ -44,8 +44,8 @@ export default defineType({
     prepare({x, y}) {
       return {
         // The built-in preview will be looking for `title`, `subtitle` and `media`
-        title: x && y ? `x: ${x}, y: ${y}` : 'Boot coordinates not yet set',
-        subtitle: 'The Coordinate',
+        title: x && y ? `x: ${x}, y: ${y}` : 'Both coordinates not yet set',
+        subtitle: 'A Coordinate',
         media: PinIcon,
         // ...but you can pass-in any arbitrary data as well 
         // and access it in your custom preview component
@@ -59,6 +59,7 @@ export default defineType({
   // 1. Components loaded here in an `object` type schema are strictly type checked
   // If loaded from an schema type alias – like {type: 'coordinate'} – they are typed `any`
   // ...unless we perform additional work with IntrinsicDefinitions
+  // see `./schema/location.ts` for an example
 
   // 2. If a component is loaded from an alias schema type, 
   // it will override the component here
