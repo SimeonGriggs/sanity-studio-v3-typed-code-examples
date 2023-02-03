@@ -1,4 +1,4 @@
-# Sanity Studio v3: Typed examples showcase
+# Sanity Studio v3: Typed Code Examples
 
 I'd like to turn these into guides. If I haven't done this already, bug me on [Slack](https://slack.sanity.io/).
 
