@@ -1,4 +1,6 @@
 import {defineField, defineType, ObjectDefinition} from 'sanity'
+// import ArrayOfObjectsField from '../components/ArrayOfObjectsField'
+import ArrayOfObjectsInput from '../components/ArrayOfObjectsInput'
 import ObjectField from '../components/ObjectField'
 import ObjectInput from '../components/ObjectInput'
 import ObjectItem from '../components/ObjectItem'
@@ -75,6 +77,7 @@ export default defineType({
       ],
     }),
     defineField({
+      hidden: true,
       name: 'coordinatesPreviewArray',
       description: 'Array of custom "preview" components',
       type: 'array',
@@ -89,5 +92,18 @@ export default defineType({
         }),
       ],
     }),
+    defineField({
+      // hidden: true,
+      name: 'array',
+      type: 'array',
+      of: [
+        {name: 'image', type: 'image'},
+        {name: 'geopoint', type: 'geopoint'}
+      ],
+      components: {
+        // field: ArrayOfObjectsField,
+        input: ArrayOfObjectsInput
+      }
+    })
   ],
 })
