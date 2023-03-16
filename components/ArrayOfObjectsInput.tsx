@@ -6,7 +6,7 @@ import {randomKey} from '@sanity/util/content'
 // A custom 'input' component replaces the built-in component, below the title and description
 // Add to your schema like this:
 // components: { input: ArrayOfObjectsInput }
-export default function ArrayOfObjectsInput(props: ArrayOfObjectsInputProps) {
+export default function ArrayOfObjectsInput(props: ArrayOfObjectsInputProps<{_key: string}>) {
   const {onChange, schemaType} = props
 
   // When selected, add a new item to the end of the array
@@ -16,6 +16,8 @@ export default function ArrayOfObjectsInput(props: ArrayOfObjectsInputProps) {
     },
     [onChange]
   )
+
+  console.log(schemaType.of)
 
   return (
     <Card tone="primary">
@@ -31,9 +33,10 @@ export default function ArrayOfObjectsInput(props: ArrayOfObjectsInputProps) {
             id="array-type-selector"
             options={schemaType.of.map((memberType) => ({
               value: memberType.name,
-              label: memberType.title ?? memberType.name,
+              type: memberType,
             }))}
             placeholder="Search item type"
+            renderOption={({type}) => <Card tone="caution" padding={3} border>{type.title}</Card>}
             onChange={handleChange}
           />
         ) : null}
