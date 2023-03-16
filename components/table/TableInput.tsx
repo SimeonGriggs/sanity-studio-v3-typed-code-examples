@@ -1,7 +1,6 @@
 import React from 'react'
 import {
   Box,
-  Grid,
   Card,
   Stack,
   Button,
@@ -37,7 +36,7 @@ import {
   unset,
   usePresenceStore,
 } from 'sanity'
-import {Feedback} from 'sanity-plugin-utils'
+import {Feedback, Cell, Row, Table} from 'sanity-plugin-utils'
 import {randomKey} from '@sanity/util/content'
 
 import {isMemberArrayOfObjects} from './asserters'
@@ -170,6 +169,22 @@ export default function TableInput(props: ObjectInputProps<TableValue>) {
   // TODO: handleDragColumn
   // TODO: handleDragRow
 
+  const handleFillRowWithCells = React.useCallback(
+    (key: string, count: number) => {
+      const {cells: newCells} = generateEmptyRow(count)
+      const cellsInsert = newCells.map((newCell) =>
+        insert([newCell], 'after', ['rows', {_key: key}, 'cells', -1])
+      )
+      onChange(cellsInsert)
+    },
+    [onChange]
+  )
+
+  const mostRowColumns =
+    value?.rows?.reduce((acc, row) => {
+      return row.cells.length > acc ? row.cells.length : acc
+    }, 0) ?? 0
+
   return (
     <Stack space={4}>
       <Card border padding={2}>
@@ -178,6 +193,8 @@ export default function TableInput(props: ObjectInputProps<TableValue>) {
           <Text>Show native input</Text>
         </Flex>
       </Card>
+
+      {mostRowColumns ? <p>{`${mostRowColumns} columns`}</p> : null}
 
       {nativeInput ? (
         props.renderDefault(props)
@@ -215,89 +232,86 @@ export default function TableInput(props: ObjectInputProps<TableValue>) {
           }
 
           return (
-            <Stack key={tableMember.key} space={1}>
-              {/* Rendered but hidden to render modals when focusPath updated */}
-              <div style={{display: `none`}}>{props.renderDefault(props)}</div>
+            <React.Fragment key={tableMember.key}>
+              <Table>
+                {tableMember.field.members.map((row, rowIndex) => {
+                  if (row.kind === 'error') {
+                    return (
+                      <Row key={row.key}>
+                        <Cell border>
+                          <Feedback
+                            tone="critical"
+                            title="Error"
+                            description="There is an error with this row"
+                          />
+                        </Cell>
+                      </Row>
+                    )
+                  }
 
-              {tableMember.field.members.map((row, rowIndex) => {
-                const isLastRow = tableMember.field.members.length - 1 === rowIndex
-
-                if (row.kind === 'error') {
                   return (
-                    <Feedback
-                      key={row.key}
-                      tone="critical"
-                      title="Error"
-                      description="There is an error with this row"
-                    />
-                  )
-                }
+                    <Row key={row.key}>
+                      {row.item.members.length > 0 ? (
+                        <>
+                          {row.item.members.map((rowMember) => {
+                            if (rowMember.kind === 'error') {
+                              return (
+                                <Cell key={rowMember.key}>
+                                  <Feedback
+                                    tone="critical"
+                                    title="There is an error with this row member"
+                                  />
+                                </Cell>
+                              )
+                            }
 
-                return (
-                  <Stack key={row.key} space={1}>
-                    {row.item.members.length > 0 ? (
-                      <Stack space={1}>
-                        {row.item.members.map((rowMember) => {
-                          if (rowMember.kind === 'error') {
+                            if (rowMember.kind === 'fieldSet') {
+                              return (
+                                <Cell key={rowMember.key}>
+                                  <Feedback tone="critical" title="UNFINISHED: Support fieldsets" />
+                                </Cell>
+                              )
+                            }
+
+                            if (!isMemberArrayOfObjects(rowMember)) {
+                              return (
+                                <Cell key={rowMember.key}>
+                                  <Feedback
+                                    tone="critical"
+                                    title="This member is not an array of objects"
+                                  />
+                                </Cell>
+                              )
+                            }
+
                             return (
-                              <Feedback
-                                key={rowMember.key}
-                                tone="critical"
-                                title="There is an error with this row member"
-                              />
-                            )
-                          }
-
-                          if (rowMember.kind === 'fieldSet') {
-                            return (
-                              <Feedback
-                                key={rowMember.key}
-                                tone="critical"
-                                title="UNFINISHED: Support fieldsets"
-                              />
-                            )
-                          }
-
-                          if (!isMemberArrayOfObjects(rowMember)) {
-                            return (
-                              <Feedback
-                                key={rowMember.key}
-                                tone="critical"
-                                title="This member is not an array of objects"
-                              />
-                            )
-                          }
-
-                          return (
-                            <Stack key={rowMember.key} space={1}>
-                              <Flex align="center" gap={3}>
+                              <React.Fragment key={rowMember.key}>
                                 {rowMember?.field?.members?.length > 0 ? (
-                                  <Box flex={1}>
-                                    <Grid gap={1} columns={rowMember?.field?.members?.length}>
-                                      {rowMember.field.members.map((cell, cellIndex) => {
-                                        if (cell.kind === 'error') {
-                                          return (
+                                  <>
+                                    {rowMember.field.members.map((cell, cellIndex) => {
+                                      if (cell.kind === 'error') {
+                                        return (
+                                          <Cell key={cell.key}>
                                             <Feedback
-                                              key={cell.key}
                                               tone="critical"
                                               title="There is an error with this cell"
                                             />
-                                          )
-                                        }
+                                          </Cell>
+                                        )
+                                      }
 
-                                        if (!cell.item.members.length) {
-                                          return (
-                                            <Feedback
-                                              key={cell.key}
-                                              tone="caution"
-                                              title="Cell has no members"
-                                            />
-                                          )
-                                        }
-
+                                      if (!cell.item.members.length) {
                                         return (
-                                          <Flex key={cell.key} gap={1}>
-                                            <Stack space={1}>
+                                          <Cell key={cell.key}>
+                                            <Feedback tone="caution" title="Cell has no members" />
+                                          </Cell>
+                                        )
+                                      }
+
+                                      return (
+                                        <Cell key={cell.key} paddingRight={1}>
+                                          <Flex gap={1}>
+                                            <Box flex={1}>
                                               {cell.item.members.map((cellMember) => {
                                                 if (cellMember.kind === 'error') {
                                                   return (
@@ -319,39 +333,34 @@ export default function TableInput(props: ObjectInputProps<TableValue>) {
                                                   )
                                                 }
 
+                                                // This is the secret sauce!!
+                                                // absolutePath must be set to write edits to the correct path
+                                                const CompactInput = () => (
+                                                  <FormInput
+                                                    {...props}
+                                                    absolutePath={[
+                                                      ...cell.item.path,
+                                                      cellMember.name,
+                                                    ]}
+                                                  />
+                                                )
+
                                                 if (compact) {
-                                                  return (
-                                                    <FormInput
-                                                      key={cellMember.key}
-                                                      {...props}
-                                                      absolutePath={[
-                                                        ...cell.item.path,
-                                                        cellMember.name,
-                                                      ]}
-                                                    />
-                                                  )
+                                                  return <CompactInput key={cellMember.key} />
                                                 }
 
                                                 return (
                                                   <MemberField
                                                     key={cellMember.key}
                                                     member={cellMember}
-                                                    renderInput={() => (
-                                                      <FormInput
-                                                        {...props}
-                                                        absolutePath={[
-                                                          ...cell.item.path,
-                                                          cellMember.name,
-                                                        ]}
-                                                      />
-                                                    )}
+                                                    renderInput={CompactInput}
                                                     renderField={props.renderField}
                                                     renderItem={props.renderItem}
                                                     renderPreview={props.renderPreview}
                                                   />
                                                 )
                                               })}
-                                            </Stack>
+                                            </Box>
 
                                             <MenuButton
                                               button={
@@ -395,81 +404,120 @@ export default function TableInput(props: ObjectInputProps<TableValue>) {
                                               popover={{portal: true}}
                                             />
                                           </Flex>
-                                        )
-                                      })}
-                                    </Grid>
-                                  </Box>
-                                ) : (
-                                  <Card tone="primary" flex={1} padding={2}>
-                                    <Flex align="center" justify="center">
-                                      <Button
-                                        icon={AddIcon}
-                                        text="Add Cell"
-                                        tone="primary"
-                                        onClick={() => handleInsertCell(row.key)}
-                                      />
-                                    </Flex>
-                                  </Card>
-                                )}
+                                        </Cell>
+                                      )
+                                    })}
 
-                                <MenuButton
-                                  button={<Button mode="ghost" icon={EllipsisVerticalIcon} />}
-                                  id={`table-row-menu-${row.key}`}
-                                  menu={
-                                    <Menu>
-                                      <MenuItem
-                                        icon={InsertAboveIcon}
-                                        text="Insert Row Before"
-                                        onClick={() => handleInsertRow(rowIndex, 'before')}
+                                    {/* If this row has less cells than the widest row, add buttons to fill the gaps */}
+                                    {/* This happens when the native array editor aggressively unsets "empty" array items */}
+                                    {rowMember.field.members.length < mostRowColumns ? (
+                                      <>
+                                        <Cell
+                                          paddingRight={1}
+                                          colSpan={mostRowColumns - rowMember.field.members.length}
+                                        >
+                                          <Stack>
+                                            <Button
+                                              mode="ghost"
+                                              text={
+                                                mostRowColumns - rowMember.field.members.length ===
+                                                1
+                                                  ? `Add Cell`
+                                                  : `Add Cells`
+                                              }
+                                              onClick={() =>
+                                                handleFillRowWithCells(
+                                                  row.key,
+                                                  mostRowColumns - rowMember.field.members.length
+                                                )
+                                              }
+                                            />
+                                          </Stack>
+                                        </Cell>
+                                      </>
+                                    ) : null}
+                                  </>
+                                ) : (
+                                  <Cell paddingRight={1} colSpan={mostRowColumns}>
+                                    <Stack>
+                                      <Button
+                                        mode="ghost"
+                                        text={mostRowColumns === 1 ? `Add Cell` : `Add Cells`}
+                                        onClick={() =>
+                                          handleFillRowWithCells(row.key, mostRowColumns)
+                                        }
                                       />
-                                      <MenuItem
-                                        icon={InsertBelowIcon}
-                                        text="Insert Row After"
-                                        onClick={() => handleInsertRow(rowIndex, 'after')}
-                                      />
-                                      <MenuItem
-                                        icon={CopyIcon}
-                                        text="Duplicate Row"
-                                        onClick={() => handleDuplicateRow(rowIndex)}
-                                      />
-                                      <MenuDivider />
-                                      <MenuItem
-                                        icon={EyeOpenIcon}
-                                        tone="primary"
-                                        text="Open Row"
-                                        onClick={() => handleSetFocus(row.item.path)}
-                                      />
-                                      <MenuDivider />
-                                      <MenuItem
-                                        icon={RemoveCircleIcon}
-                                        tone="critical"
-                                        text="Remove Row"
-                                        onClick={() => handleRemoveRow(row.key)}
-                                      />
-                                    </Menu>
-                                  }
-                                  popover={{portal: true}}
-                                />
-                              </Flex>
-                            </Stack>
-                          )
-                        })}
+                                    </Stack>
+                                  </Cell>
+                                )}
+                              </React.Fragment>
+                            )
+                          })}
+                        </>
+                      ) : (
+                        <Feedback tone="caution" title="Row has no members" />
+                      )}
+                      <MenuButton
+                        button={<Button mode="ghost" icon={EllipsisVerticalIcon} />}
+                        id={`table-row-menu-${row.key}`}
+                        menu={
+                          <Menu>
+                            <MenuItem
+                              icon={InsertAboveIcon}
+                              text="Insert Row Before"
+                              onClick={() => handleInsertRow(rowIndex, 'before')}
+                            />
+                            <MenuItem
+                              icon={InsertBelowIcon}
+                              text="Insert Row After"
+                              onClick={() => handleInsertRow(rowIndex, 'after')}
+                            />
+                            <MenuItem
+                              icon={CopyIcon}
+                              text="Duplicate Row"
+                              onClick={() => handleDuplicateRow(rowIndex)}
+                            />
+                            <MenuDivider />
+                            <MenuItem
+                              icon={EyeOpenIcon}
+                              tone="primary"
+                              text="Open Row"
+                              onClick={() => handleSetFocus(row.item.path)}
+                            />
+                            <MenuDivider />
+                            <MenuItem
+                              icon={RemoveCircleIcon}
+                              tone="critical"
+                              text="Remove Row"
+                              onClick={() => handleRemoveRow(row.key)}
+                            />
+                          </Menu>
+                        }
+                        popover={{portal: true}}
+                      />
+                    </Row>
+                  )
+                })}
+
+                <tfoot>
+                  <Row>
+                    <Cell paddingTop={4} colSpan={mostRowColumns + 1}>
+                      <Stack>
+                        <Button
+                          tone="primary"
+                          text="Add row"
+                          icon={AddIcon}
+                          onClick={() => handleInsertRow(-1, 'after')}
+                        />
                       </Stack>
-                    ) : (
-                      <Feedback tone="caution" title="Row has no members" />
-                    )}
-                  </Stack>
-                )
-              })}
-              <Stack paddingTop={4} flex={1}>
-                <Button
-                  tone="primary"
-                  text="Add row"
-                  icon={AddIcon}
-                  onClick={() => handleInsertRow(-1, 'after')}
-                />
-              </Stack>
-            </Stack>
+                    </Cell>
+                  </Row>
+                </tfoot>
+              </Table>
+
+              {/* Rendered but hidden to render modals when focusPath updated */}
+              <div style={{display: `none`}}>{props.renderDefault(props)}</div>
+            </React.Fragment>
           )
         })
       ) : (

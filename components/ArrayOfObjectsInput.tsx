@@ -20,12 +20,6 @@ export default function ArrayOfObjectsInput(props: ArrayOfObjectsInputProps<{_ke
     [onChange]
   )
 
-  const renderValue = React.useCallback((value: string, option?: {id: string; value: string}) => {
-    if (!option) return value
-
-    return ''
-  }, [])
-
   return (
     <Card tone="primary">
       <Stack space={3}>
@@ -50,7 +44,7 @@ export default function ArrayOfObjectsInput(props: ArrayOfObjectsInputProps<{_ke
               </Card>
             )}
             onChange={handleChange}
-            renderValue={renderValue}
+            // renderValue={renderValue}
             value={value}
           />
         ) : null}
