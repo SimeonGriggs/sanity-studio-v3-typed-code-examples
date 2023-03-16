@@ -36,7 +36,11 @@ export default function ArrayOfObjectsInput(props: ArrayOfObjectsInputProps<{_ke
               type: memberType,
             }))}
             placeholder="Search item type"
-            renderOption={({type}) => <Card tone="caution" padding={3} border>{type.title}</Card>}
+            renderOption={({type}) => (
+              <Card tone="caution" padding={3} border>
+                {type.title}
+              </Card>
+            )}
             onChange={handleChange}
           />
         ) : null}

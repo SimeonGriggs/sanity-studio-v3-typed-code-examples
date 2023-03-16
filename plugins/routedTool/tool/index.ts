@@ -3,7 +3,7 @@ import {RocketIcon} from '@sanity/icons'
 
 import RoutedTool from '../components/RoutedTool'
 import {UNIQUE_TYPES} from '../constants'
-import { route } from 'sanity/router'
+import {route} from 'sanity/router'
 
 export type RoutedToolOptions = {
   types?: string[]
@@ -30,6 +30,6 @@ export const routedTool: RoutedToolConfig = {
     // Example: /routed-tool/flying
     route.create({
       path: '/:type',
-    })
-  ])
+    }),
+  ]),
 }

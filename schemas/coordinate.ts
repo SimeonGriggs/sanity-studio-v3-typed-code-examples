@@ -47,27 +47,27 @@ export default defineType({
         title: x && y ? `x: ${x}, y: ${y}` : 'Both coordinates not yet set',
         subtitle: 'A Coordinate',
         media: PinIcon,
-        // ...but you can pass-in any arbitrary data as well 
+        // ...but you can pass-in any arbitrary data as well
         // and access it in your custom preview component
         // but TypeScript won't be expecting them in PreviewProps
         // see `ObjectPreviewRetyped.tsx` for a workaround
         x,
         y,
       }
-    }
+    },
   },
   // 1. Components loaded here in an `object` type schema are strictly type checked
   // If loaded from an schema type alias – like {type: 'coordinate'} – they are typed `any`
   // ...unless we perform additional work with IntrinsicDefinitions
   // see `./schema/location.ts` for an example
 
-  // 2. If a component is loaded from an alias schema type, 
+  // 2. If a component is loaded from an alias schema type,
   // it will override the component here
   // components: {
-    // field: ObjectField,
-    // input: ObjectInput,
-    // item: ObjectItem,
-    // preview: ObjectPreview,
-    // preview: ObjectPreviewRetyped,
+  // field: ObjectField,
+  // input: ObjectInput,
+  // item: ObjectItem,
+  // preview: ObjectPreview,
+  // preview: ObjectPreviewRetyped,
   // },
 })

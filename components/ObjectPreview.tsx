@@ -2,7 +2,7 @@ import React from 'react'
 import {PreviewProps} from 'sanity'
 import {Stack, Card, Code, Flex, Box} from '@sanity/ui'
 
-/** 
+/**
  * A "preview" component doesn't have a way to pass in a Type for the Value
  * It just inherits whatever your schema declared in its `preview` key
  * Into the `title` and `subtitle` keys
