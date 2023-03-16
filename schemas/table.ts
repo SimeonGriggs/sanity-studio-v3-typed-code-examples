@@ -45,6 +45,15 @@ export const tableCellSchema = defineArrayMember({
     // tableCellReferenceSchema,
     // tableCellPortableTextSchema,
     // tableCellBooleanSchema,
+    defineField({
+      name: 'colSpan',
+      type: 'number',
+      placeholder: 'colSpan',
+    }),
+    // defineField({
+    //   name: 'rowSpan',
+    //   type: 'number',
+    // }),
   ],
 })
 
@@ -75,6 +84,7 @@ export const tableSchema = {
     input: TableInput,
   },
   options: {
+    debug: true,
     compact: true,
   },
 }
