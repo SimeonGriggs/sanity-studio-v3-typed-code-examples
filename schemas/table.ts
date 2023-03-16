@@ -45,14 +45,15 @@ export const tableCellSchema = defineArrayMember({
     // tableCellReferenceSchema,
     // tableCellPortableTextSchema,
     // tableCellBooleanSchema,
-    defineField({
-      name: 'colSpan',
-      type: 'number',
-      placeholder: 'colSpan',
-    }),
+    // defineField({
+    //   name: 'colSpan',
+    //   type: 'number',
+    //   placeholder: 'colSpan',
+    // }),
     // defineField({
     //   name: 'rowSpan',
     //   type: 'number',
+    //   placeholder: 'rowSpan',
     // }),
   ],
 })
