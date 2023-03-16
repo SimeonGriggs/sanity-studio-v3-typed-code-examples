@@ -17,8 +17,6 @@ export default function ArrayOfObjectsInput(props: ArrayOfObjectsInputProps<{_ke
     [onChange]
   )
 
-  console.log(schemaType.of)
-
   return (
     <Card tone="primary">
       <Stack space={3}>
