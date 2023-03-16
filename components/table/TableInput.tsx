@@ -102,7 +102,6 @@ function getErrorLevel(validation: FormNodeValidation[] = []): CardTone | null {
 export default function TableInput(props: ObjectInputProps<TableValue>) {
   const {onChange, focusPath, value} = props
   const {compact = true, debug = false} = props.schemaType.options || {}
-  console.log(props.focusPath)
 
   const [nativeInput, setNativeInput] = React.useState(false)
   const [cellControls, setCellControls] = React.useState(false)
@@ -114,7 +113,6 @@ export default function TableInput(props: ObjectInputProps<TableValue>) {
 
   const handleSetFocus = React.useCallback(
     (path: Path) => {
-      console.log(`shouldFocus`, path)
       pane.onPathOpen(path)
     },
     [pane]
@@ -231,24 +229,8 @@ export default function TableInput(props: ObjectInputProps<TableValue>) {
       return row?.cells?.length > acc ? row.cells.length : acc
     }, 0) ?? 0
 
-  const focusedMember = React.useMemo(() => {
-    // There should only be one
-    const tableFieldMembers = props.members.find((member) => member.kind === 'field') as FieldMember
-
-    if (!isMemberArrayOfObjects(tableFieldMembers)) {
-      return null
-    }
-
-    const rowMembers = tableFieldMembers.field.members
-
-    console.log(`rowMembers`, rowMembers)
-  }, [props.members])
-  console.log(focusedMember)
-
   return (
     <Stack space={debug ? 3 : 0}>
-      {JSON.stringify(focusPath)}
-
       {nativeInput ? (
         props.renderDefault(props)
       ) : props.members.length > 0 ? (
@@ -680,18 +662,9 @@ export default function TableInput(props: ObjectInputProps<TableValue>) {
 
               {/* Rendered but hidden to render modals when focusPath updated */}
               <div style={{display: `none`}}>
-                {/* {props.renderDefault(props)} */}
+                {props.renderDefault(props)}
                 {/* {props.focusPath.length ? props.renderDefault(props) : null} */}
               </div>
-              {/* {props.focusPath.length ? (
-                <MemberField
-                  // member={cellMember}
-                  renderInput={props.renderInput}
-                  renderField={props.renderField}
-                  renderItem={props.renderItem}
-                  renderPreview={props.renderPreview}
-                />
-              ) : null} */}
             </React.Fragment>
           )
         })
