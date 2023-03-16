@@ -8,16 +8,23 @@ import {randomKey} from '@sanity/util/content'
 // components: { input: ArrayOfObjectsInput }
 export default function ArrayOfObjectsInput(props: ArrayOfObjectsInputProps<{_key: string}>) {
   const {onChange, schemaType} = props
+  const [value, setValue] = React.useState(``)
 
   // When selected, add a new item to the end of the array
   const handleChange = React.useCallback(
-    (value: string) => {
-      onChange(insert([{_type: value, _key: randomKey(12)}], 'after', [-1]))
+    (newValue: string) => {
+      onChange(insert([{_type: newValue, _key: randomKey(12)}], 'after', [-1]))
+      setValue(newValue)
+      setTimeout(() => setValue(''), 0)
     },
     [onChange]
   )
 
-  console.log(schemaType.of)
+  const renderValue = React.useCallback((value: string, option?: {id: string; value: string}) => {
+    if (!option) return value
+
+    return ''
+  }, [])
 
   return (
     <Card tone="primary">
@@ -32,6 +39,7 @@ export default function ArrayOfObjectsInput(props: ArrayOfObjectsInputProps<{_ke
           <Autocomplete
             id="array-type-selector"
             options={schemaType.of.map((memberType) => ({
+              id: memberType.name,
               value: memberType.name,
               type: memberType,
             }))}
@@ -42,6 +50,8 @@ export default function ArrayOfObjectsInput(props: ArrayOfObjectsInputProps<{_ke
               </Card>
             )}
             onChange={handleChange}
+            renderValue={renderValue}
+            value={value}
           />
         ) : null}
       </Stack>
