@@ -6,7 +6,7 @@ import {randomKey} from '@sanity/util/content'
 // A custom 'input' component replaces the built-in component, below the title and description
 // Add to your schema like this:
 // components: { input: ArrayOfObjectsInput }
-export default function ArrayOfObjectsInput(props: ArrayOfObjectsInputProps) {
+export default function ArrayOfObjectsInput(props: ArrayOfObjectsInputProps<{_key: string}>) {
   const {onChange, schemaType} = props
   const [value, setValue] = React.useState(``)
 
@@ -41,9 +41,14 @@ export default function ArrayOfObjectsInput(props: ArrayOfObjectsInputProps) {
             options={schemaType.of.map((memberType) => ({
               id: memberType.name,
               value: memberType.name,
-              label: memberType.title ?? memberType.name,
+              type: memberType,
             }))}
-            placeholder="Search item types"
+            placeholder="Search item type"
+            renderOption={({type}) => (
+              <Card tone="caution" padding={3} border>
+                {type.title}
+              </Card>
+            )}
             onChange={handleChange}
             renderValue={renderValue}
             value={value}

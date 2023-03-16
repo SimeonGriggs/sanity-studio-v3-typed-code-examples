@@ -1,8 +1,6 @@
 import React from 'react'
-import { ArrayOfObjectsInputProps } from 'sanity'
+import {ArrayOfObjectsInputProps} from 'sanity'
 
 export default function ArrayOfObjectsInput(props: ArrayOfObjectsInputProps) {
-  return (
-    <div>ArrayOfObjectsInput</div>
-  )
+  return <div>ArrayOfObjectsInput</div>
 }

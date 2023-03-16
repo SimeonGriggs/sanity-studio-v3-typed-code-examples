@@ -10,7 +10,7 @@ import ObjectPreview from '../components/ObjectPreview'
  * Components for "Alias" schema types are not type checked as strictly as those loaded
  * directly on built-in schema types like `object` and `array`
  *
- * In this example we have registered an `object` field type 
+ * In this example we have registered an `object` field type
  * as an alias schema type called `coordinate`
  *
  * For strict TypeScript checking in these schema type aliases we need to add this
@@ -98,12 +98,12 @@ export default defineType({
       type: 'array',
       of: [
         {name: 'image', type: 'image'},
-        {name: 'geopoint', type: 'geopoint'}
+        {name: 'geopoint', type: 'geopoint'},
       ],
       components: {
         // field: ArrayOfObjectsField,
-        input: ArrayOfObjectsInput
-      }
-    })
+        input: ArrayOfObjectsInput,
+      },
+    }),
   ],
 })
