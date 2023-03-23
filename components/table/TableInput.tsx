@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import {
   Grid,
   Card,
@@ -62,6 +62,10 @@ type TableValue = KeyedObject & {
   rows: RowValue[]
 }
 
+function getAlphabetIndex(index: number): string {
+  return String.fromCharCode(65 + index)
+}
+
 function generateEmptyCell(): CellValue {
   return {
     _key: randomKey(12),
@@ -82,17 +86,11 @@ function generateEmptyRow(cellCount = 0): RowValue {
 function getErrorLevel(validation: FormNodeValidation[] = []): CardTone | null {
   if (!validation.length) {
     return null
-  }
-
-  if (validation.find((v) => v.level === 'error')) {
+  } else if (validation.find((v) => v.level === 'error')) {
     return 'critical'
-  }
-
-  if (validation.find((v) => v.level === 'warning')) {
+  } else if (validation.find((v) => v.level === 'warning')) {
     return 'caution'
-  }
-
-  if (validation.find((v) => v.level === 'warning')) {
+  } else if (validation.find((v) => v.level === 'info')) {
     return 'default'
   }
 
@@ -100,23 +98,71 @@ function getErrorLevel(validation: FormNodeValidation[] = []): CardTone | null {
 }
 
 export default function TableInput(props: ObjectInputProps<TableValue>) {
-  const {onChange, focusPath, value} = props
+  const {onChange, members, value} = props
   const {compact = true, debug = false} = props.schemaType.options || {}
 
   const [nativeInput, setNativeInput] = React.useState(false)
   const [cellControls, setCellControls] = React.useState(false)
-  const [rowControls, setRowControls] = React.useState(true)
   const [initColumnsCount, setInitColumnsCount] = React.useState(1)
   const [initRowsCount, setInitRowsCount] = React.useState(1)
 
-  const pane = useDocumentPane()
+  const {onPathOpen, formState} = useDocumentPane()
 
+  // Open modal of an object field
   const handleSetFocus = React.useCallback(
     (path: Path) => {
-      pane.onPathOpen(path)
+      onPathOpen(path)
     },
-    [pane]
+    [onPathOpen]
   )
+
+  const [focused, setFocused] = React.useState<{
+    row: number | null
+    column: number | null
+  }>({row: null, column: null})
+
+  // Highlight active row and column of focused input
+  useEffect(() => {
+    if (formState && formState.focusPath.length && formState.focusPath[0] === `table`) {
+      const [rowKey, cellKey] = formState.focusPath.reduce<string[]>((acc, cur) => {
+        if (typeof cur !== 'string' && typeof cur !== 'number' && '_key' in cur) {
+          return [...acc, cur._key]
+        }
+
+        return acc
+      }, [])
+
+      if (
+        (!rowKey || !cellKey) &&
+        (typeof focused.row === 'number' || typeof focused.column === 'number')
+      ) {
+        // setFocused({row: null, column: null})
+      } else {
+        const rowIndex = value?.rows?.findIndex((r) => r._key === rowKey)
+        const columnIndex =
+          typeof rowIndex === 'number'
+            ? value?.rows?.[rowIndex]?.cells?.findIndex((c) => c._key === cellKey)
+            : null
+
+        if (
+          typeof rowIndex === 'number' &&
+          typeof columnIndex === 'number' &&
+          (rowIndex !== focused.row || columnIndex !== focused.column)
+        ) {
+          setFocused({row: rowIndex, column: columnIndex})
+        } else {
+          // setFocused({row: null, column: null})
+        }
+      }
+    } else if (
+      formState &&
+      !formState.focusPath.length &&
+      (typeof focused.row === 'number' || typeof focused.column === 'number')
+    ) {
+      setFocused({row: null, column: null})
+    }
+  }, [formState, value, focused])
+  console.log(formState?.focusPath, focused)
 
   const handleRemoveRow = React.useCallback(
     (key: string) => {
@@ -197,6 +243,24 @@ export default function TableInput(props: ObjectInputProps<TableValue>) {
     [onChange, value]
   )
 
+  const handleDuplicateColumn = React.useCallback(
+    (index: number) => {
+      const {rows = []} = value || {}
+      const clickedColumnCells = rows.map((r) => r.cells[index])
+      console.log({clickedColumnCells})
+
+      const patches = clickedColumnCells.map((cell, rowIndex) => {
+        const newCell = {
+          ...cell,
+          _key: randomKey(12),
+        }
+        return insert([newCell], 'after', ['rows', rowIndex, 'cells', index])
+      })
+      onChange(patches)
+    },
+    [onChange, value]
+  )
+
   const handleFillRowWithCells = React.useCallback(
     (key: string, count: number) => {
       const {cells: newCells} = generateEmptyRow(count)
@@ -269,12 +333,91 @@ export default function TableInput(props: ObjectInputProps<TableValue>) {
           return (
             <React.Fragment key={tableMember.key}>
               <Table>
+                {mostRowColumns > 0 ? (
+                  <thead>
+                    <Row>
+                      {[...Array(mostRowColumns)].map((_, cellIndex) => (
+                        <Cell key={cellIndex} padding={0.5} paddingBottom={2}>
+                          <MenuButton
+                            button={
+                              <Stack>
+                                <Button
+                                  tone="primary"
+                                  mode={
+                                    typeof focused.column === 'number' &&
+                                    focused.column === cellIndex
+                                      ? 'default'
+                                      : 'ghost'
+                                  }
+                                  paddingY={2}
+                                  style={{
+                                    borderRadius:
+                                      cellIndex === 0
+                                        ? '3px 0 0 3px'
+                                        : cellIndex === mostRowColumns - 1
+                                        ? '0 3px 3px 0'
+                                        : 0,
+                                  }}
+                                  textAlign="center"
+                                  text={getAlphabetIndex(cellIndex)}
+                                />
+                              </Stack>
+                            }
+                            id={`table-column-header-menu-${cellIndex}`}
+                            menu={
+                              <Menu>
+                                <MenuItem
+                                  icon={ChevronLeftIcon}
+                                  text="Insert column before"
+                                  tone="primary"
+                                  onClick={() => handleInsertColumn(cellIndex, 'before')}
+                                />
+                                <MenuItem
+                                  iconRight={ChevronRightIcon}
+                                  text="Insert column after"
+                                  tone="primary"
+                                  onClick={() => handleInsertColumn(cellIndex, 'after')}
+                                />
+                                <MenuDivider />
+                                <MenuItem
+                                  icon={CopyIcon}
+                                  text="Duplicate column"
+                                  tone="primary"
+                                  onClick={() => handleDuplicateColumn(cellIndex)}
+                                />
+                                <MenuDivider />
+                                <MenuItem
+                                  icon={TrashIcon}
+                                  text="Remove column"
+                                  tone="critical"
+                                  onClick={() => handleRemoveColumn(cellIndex)}
+                                />
+                              </Menu>
+                            }
+                            popover={{portal: true}}
+                          />
+                        </Cell>
+                      ))}
+                      <Cell paddingLeft={2} paddingBottom={2}>
+                        <Button
+                          tone="primary"
+                          mode="ghost"
+                          paddingY={2}
+                          textAlign="center"
+                          icon={EllipsisVerticalIcon}
+                          style={{width: `100%`}}
+                        />
+                      </Cell>
+                    </Row>
+                  </thead>
+                ) : null}
+
                 <tbody>
                   {tableMember.field.members.map((row, rowIndex) => {
                     if (row.kind === 'error') {
                       return (
                         <Row key={row.key}>
-                          <Cell border>
+                          <Cell>
                             <Feedback
                               tone="critical"
                               title="Error"
@@ -379,6 +522,7 @@ export default function TableInput(props: ObjectInputProps<TableValue>) {
                                             colSpan={
                                               typeof colSpan === 'number' ? colSpan : undefined
                                             }
+                                            padding={0.5}
                                             tone={errorLevel ?? undefined}
                                           >
                                             <Flex gap={1} align="center">
@@ -410,10 +554,7 @@ export default function TableInput(props: ObjectInputProps<TableValue>) {
                                                         {...props}
                                                         // This is the secret sauce!!
                                                         // absolutePath must be set to write edits to the correct path
-                                                        absolutePath={[
-                                                          ...cell.item.path,
-                                                          cellMember.name,
-                                                        ]}
+                                                        absolutePath={cellMember.field.path}
                                                       />
                                                     )
                                                   }
@@ -425,10 +566,7 @@ export default function TableInput(props: ObjectInputProps<TableValue>) {
                                                       renderInput={() => (
                                                         <FormInput
                                                           {...props}
-                                                          absolutePath={[
-                                                            ...cell.item.path,
-                                                            cellMember.name,
-                                                          ]}
+                                                          absolutePath={cellMember.field.path}
                                                         />
                                                       )}
                                                       renderField={props.renderField}
@@ -450,23 +588,6 @@ export default function TableInput(props: ObjectInputProps<TableValue>) {
                                                   id={`table-column-menu-${row.key}`}
                                                   menu={
                                                     <Menu>
-                                                      <MenuItem
-                                                        icon={ChevronLeftIcon}
-                                                        text="Insert column before"
-                                                        tone="primary"
-                                                        onClick={() =>
-                                                          handleInsertColumn(cellIndex, 'before')
-                                                        }
-                                                      />
-                                                      <MenuItem
-                                                        iconRight={ChevronRightIcon}
-                                                        text="Insert column after"
-                                                        tone="primary"
-                                                        onClick={() =>
-                                                          handleInsertColumn(cellIndex, 'after')
-                                                        }
-                                                      />
-                                                      <MenuDivider />
                                                       <MenuItem
                                                         text="Open cell"
                                                         icon={EyeOpenIcon}
@@ -490,15 +611,6 @@ export default function TableInput(props: ObjectInputProps<TableValue>) {
                                                         tone="critical"
                                                         onClick={() =>
                                                           handleRemoveCell(cell.item.path)
-                                                        }
-                                                      />
-                                                      <MenuDivider />
-                                                      <MenuItem
-                                                        icon={TrashIcon}
-                                                        text="Remove column"
-                                                        tone="critical"
-                                                        onClick={() =>
-                                                          handleRemoveColumn(cellIndex)
                                                         }
                                                       />
                                                     </Menu>
@@ -554,48 +666,67 @@ export default function TableInput(props: ObjectInputProps<TableValue>) {
                         ) : (
                           <Feedback tone="caution" title="Row has no members" />
                         )}
-                        {rowControls ? (
-                          <Cell paddingLeft={2}>
-                            <MenuButton
-                              button={<Button mode="ghost" icon={EllipsisVerticalIcon} />}
-                              id={`table-row-menu-${row.key}`}
-                              menu={
-                                <Menu>
-                                  <MenuItem
-                                    icon={InsertAboveIcon}
-                                    text="Insert row before"
-                                    onClick={() => handleInsertRow(rowIndex, 'before')}
-                                  />
-                                  <MenuItem
-                                    icon={InsertBelowIcon}
-                                    text="Insert row after"
-                                    onClick={() => handleInsertRow(rowIndex, 'after')}
-                                  />
-                                  <MenuItem
-                                    icon={CopyIcon}
-                                    text="Duplicate row"
-                                    onClick={() => handleDuplicateRow(rowIndex)}
-                                  />
-                                  <MenuDivider />
-                                  <MenuItem
-                                    icon={EyeOpenIcon}
-                                    tone="primary"
-                                    text="Open row"
-                                    onClick={() => handleSetFocus(row.item.path)}
-                                  />
-                                  <MenuDivider />
-                                  <MenuItem
-                                    icon={TrashIcon}
-                                    tone="critical"
-                                    text="Remove row"
-                                    onClick={() => handleRemoveRow(row.key)}
-                                  />
-                                </Menu>
-                              }
-                              popover={{portal: true}}
-                            />
-                          </Cell>
-                        ) : null}
+
+                        <Cell padding={0.5} paddingLeft={2}>
+                          <MenuButton
+                            button={
+                              <Button
+                                mode={
+                                  typeof focused.row === 'number' && focused.row === rowIndex
+                                    ? 'default'
+                                    : 'ghost'
+                                }
+                                tone="primary"
+                                radius={0}
+                                style={{
+                                  borderRadius:
+                                    rowIndex === 0
+                                      ? '3px 3px 0 0'
+                                      : value && value?.rows?.length - 1 === rowIndex
+                                      ? '0 0 3px 3px'
+                                      : 0,
+                                  width: `100%`,
+                                }}
+                                text={rowIndex + 1}
+                              />
+                            }
+                            id={`table-row-menu-${row.key}`}
+                            menu={
+                              <Menu>
+                                <MenuItem
+                                  icon={InsertAboveIcon}
+                                  text="Insert row before"
+                                  onClick={() => handleInsertRow(rowIndex, 'before')}
+                                />
+                                <MenuItem
+                                  icon={InsertBelowIcon}
+                                  text="Insert row after"
+                                  onClick={() => handleInsertRow(rowIndex, 'after')}
+                                />
+                                <MenuItem
+                                  icon={CopyIcon}
+                                  text="Duplicate row"
+                                  onClick={() => handleDuplicateRow(rowIndex)}
+                                />
+                                <MenuDivider />
+                                <MenuItem
+                                  icon={EyeOpenIcon}
+                                  tone="primary"
+                                  text="Open row"
+                                  onClick={() => handleSetFocus(row.item.path)}
+                                />
+                                <MenuDivider />
+                                <MenuItem
+                                  icon={TrashIcon}
+                                  tone="critical"
+                                  text="Remove row"
+                                  onClick={() => handleRemoveRow(row.key)}
+                                />
+                              </Menu>
+                            }
+                            popover={{portal: true}}
+                          />
+                        </Cell>
                       </Row>
                     )
                   })}
@@ -603,10 +734,7 @@ export default function TableInput(props: ObjectInputProps<TableValue>) {
 
                 <tfoot>
                   <Row>
-                    <Cell
-                      paddingTop={3}
-                      colSpan={rowControls ? mostRowColumns + 1 : mostRowColumns}
-                    >
+                    <Cell paddingTop={3} colSpan={mostRowColumns + 1}>
                       <Stack>
                         {value && value?.rows?.length > 0 ? (
                           <Button
@@ -674,7 +802,7 @@ export default function TableInput(props: ObjectInputProps<TableValue>) {
 
       {debug ? (
         <Card>
-          <Grid gap={3} columns={3}>
+          <Grid gap={3} columns={2}>
             <Button
               fontSize={1}
               padding={3}
@@ -692,15 +820,6 @@ export default function TableInput(props: ObjectInputProps<TableValue>) {
               icon={cellControls ? CheckmarkCircleIcon : CircleIcon}
               onClick={() => setCellControls(!cellControls)}
               text="Cell controls"
-            />
-            <Button
-              fontSize={1}
-              padding={3}
-              tone={rowControls ? `positive` : `default`}
-              mode={rowControls ? `default` : `ghost`}
-              icon={rowControls ? CheckmarkCircleIcon : CircleIcon}
-              onClick={() => setRowControls(!rowControls)}
-              text="Row controls"
             />
           </Grid>
         </Card>
