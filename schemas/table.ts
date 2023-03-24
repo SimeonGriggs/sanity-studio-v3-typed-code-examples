@@ -1,9 +1,10 @@
 import {defineField, defineArrayMember} from 'sanity'
+import TableField from '../components/table/TableField'
 
 import TableInput from '../components/table/TableInput'
 
 export const tableCellTextSchema = defineField({
-  name: 'cellString',
+  name: 'value',
   description: `It's the content`,
   type: 'string',
   validation: (rule) =>
@@ -82,6 +83,7 @@ export const tableSchema = {
     }),
   ],
   components: {
+    field: TableField,
     input: TableInput,
   },
   options: {
