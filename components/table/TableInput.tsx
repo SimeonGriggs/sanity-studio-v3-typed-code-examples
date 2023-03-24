@@ -1,4 +1,5 @@
 import React, {useEffect} from 'react'
+import {useCopyToClipboard} from 'usehooks-ts'
 import {
   Grid,
   Card,
@@ -12,6 +13,7 @@ import {
   CardTone,
   TextInput,
   Text,
+  useToast,
 } from '@sanity/ui'
 import {
   TrashIcon,
@@ -20,6 +22,7 @@ import {
   ResetIcon,
   EllipsisVerticalIcon,
   CopyIcon,
+  ClipboardIcon,
   EyeOpenIcon,
   AddIcon,
   RemoveCircleIcon,
@@ -100,6 +103,7 @@ function getErrorLevel(validation: FormNodeValidation[] = []): CardTone | null {
 export default function TableInput(props: ObjectInputProps<TableValue>) {
   const {onChange, members, value} = props
   const {compact = true, debug = false} = props.schemaType.options || {}
+  const toast = useToast()
 
   const [nativeInput, setNativeInput] = React.useState(false)
   const [cellControls, setCellControls] = React.useState(false)
@@ -162,7 +166,67 @@ export default function TableInput(props: ObjectInputProps<TableValue>) {
       setFocused({row: null, column: null})
     }
   }, [formState, value, focused])
-  console.log(formState?.focusPath, focused)
+
+  const [copiedValue, copyToClipboard] = useCopyToClipboard()
+
+  const handleCopyTable = React.useCallback(async () => {
+    const {rows = []} = value ?? {}
+    if (!rows.length) {
+      return
+    }
+
+    const plainTextTable = rows.map((r) => r.cells.map((c) => c.value).join('\t')).join('\n')
+    const hasCopied = await copyToClipboard(plainTextTable)
+    toast.push({
+      status: hasCopied ? 'success' : 'error',
+      title: hasCopied ? 'Copied to clipboard' : 'Failed to copy to clipboard',
+    })
+  }, [toast, value, copyToClipboard])
+
+  const handlePasteTable = React.useCallback(async () => {
+    try {
+      const permission = await navigator.permissions.query({
+        name: 'clipboard-read',
+      })
+      if (permission.state === 'denied') {
+        throw new Error('Not allowed to read clipboard.')
+      }
+      const clipboardText = await navigator.clipboard.readText()
+
+      if (clipboardText) {
+        const pasteTable = clipboardText
+          .split('\n')
+          // don't create empty rows
+          .filter(Boolean)
+          .map((row) => {
+            return {
+              _key: randomKey(12),
+              _type: 'row',
+              cells: row
+                .split('\t')
+                // some cells might be empty
+                // .filter(Boolean)
+                .map((cell) => {
+                  return {
+                    _key: randomKey(12),
+                    _type: 'cell',
+                    value: cell,
+                  }
+                }),
+            }
+          })
+
+        onChange([setIfMissing([], ['rows']), insert(pasteTable, 'after', ['rows', -1])])
+      } else {
+        toast.push({
+          status: 'warning',
+          title: 'Clipboard is empty',
+        })
+      }
+    } catch (error) {
+      console.error(error.message)
+    }
+  }, [onChange, toast])
 
   const handleRemoveRow = React.useCallback(
     (key: string) => {
@@ -247,7 +311,6 @@ export default function TableInput(props: ObjectInputProps<TableValue>) {
     (index: number) => {
       const {rows = []} = value || {}
       const clickedColumnCells = rows.map((r) => r.cells[index])
-      console.log({clickedColumnCells})
 
       const patches = clickedColumnCells.map((cell, rowIndex) => {
         const newCell = {
@@ -399,13 +462,41 @@ export default function TableInput(props: ObjectInputProps<TableValue>) {
                         </Cell>
                       ))}
                       <Cell paddingLeft={2} paddingBottom={2}>
-                        <Button
-                          tone="primary"
-                          mode="ghost"
-                          paddingY={2}
-                          textAlign="center"
-                          icon={EllipsisVerticalIcon}
-                          style={{width: `100%`}}
+                        <MenuButton
+                          button={
+                            <Stack>
+                              <Button
+                                tone="primary"
+                                mode="ghost"
+                                paddingY={2}
+                                textAlign="center"
+                                icon={EllipsisVerticalIcon}
+                                // style={{width: `100%`}}
+                              />
+                            </Stack>
+                          }
+                          id={`table-context-menu`}
+                          menu={
+                            <Menu>
+                              <MenuItem
+                                icon={CopyIcon}
+                                text="Copy table"
+                                onClick={handleCopyTable}
+                              />
+                              <MenuItem
+                                icon={ClipboardIcon}
+                                text="Paste table"
+                                onClick={handlePasteTable}
+                              />
+                              <MenuDivider />
+                              <MenuItem
+                                icon={TrashIcon}
+                                text="Expand"
+                                // onClick={() => handleRemoveColumn(cellIndex)}
+                              />
+                            </Menu>
+                          }
+                          popover={{portal: true}}
                         />
                       </Cell>
                     </Row>
