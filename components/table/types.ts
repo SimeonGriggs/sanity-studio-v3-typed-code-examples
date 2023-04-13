@@ -1,4 +1,4 @@
-import {KeyedObject} from 'sanity'
+import {KeyedObject, FormPatch, PatchEvent} from 'sanity'
 
 // Added to silence TS errors
 /**
@@ -25,3 +25,5 @@ export type CellPosition = {
   row: string
   rowSpan: number
 }
+
+export type OnChange = (patch: FormPatch | FormPatch[] | PatchEvent) => void

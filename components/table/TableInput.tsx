@@ -32,6 +32,7 @@ import RowControls from './RowControls'
 import {generatePositionString} from './lib/generatePositionString'
 import ColControls from './ColControls'
 import TableControls from './TableControls'
+import TableCreate from './TableCreate'
 
 export default function TableInput(props: ObjectInputProps<TableValue>) {
   const {onChange, value} = props
@@ -144,13 +145,6 @@ export default function TableInput(props: ObjectInputProps<TableValue>) {
     }
   }, [onChange, toast])
 
-  const handleRemoveRow = React.useCallback(
-    (key: string) => {
-      onChange(unset(['rows', {_key: key}]))
-    },
-    [onChange]
-  )
-
   const handleRemoveColumn = React.useCallback(
     (index: number) => {
       if (!value?.rows?.length) {
@@ -159,34 +153,6 @@ export default function TableInput(props: ObjectInputProps<TableValue>) {
 
       const columnUnsets = value.rows.map((r) => unset(['rows', {_key: r._key}, 'cells', index]))
       onChange(columnUnsets)
-    },
-    [onChange, value]
-  )
-
-  const handleInsertTable = React.useCallback(
-    (columnsCount: number, rowsCount: number) => {
-      const newTable = generateEmptyCells({
-        rows: rowsCount,
-        cols: columnsCount,
-      })
-      onChange(set(newTable, ['cells']))
-    },
-    [onChange]
-  )
-
-  const handleInsertRow = React.useCallback(
-    (index: number, position: FormInsertPatchPosition) => {
-      const {rows = []} = value || {}
-      const clickedOrLastRow =
-        index < 0 && rows?.length
-          ? rows[index < 0 && rows.length ? rows.length - 1 : index]
-          : rows[index]
-      const newRow = [
-        generateEmptyCells(clickedOrLastRow?.cells?.length ? clickedOrLastRow.cells.length : 1),
-      ]
-      const rowInsert = insert(newRow, position, ['rows', index])
-
-      onChange([setIfMissing([], ['rows']), rowInsert])
     },
     [onChange, value]
   )
@@ -201,27 +167,6 @@ export default function TableInput(props: ObjectInputProps<TableValue>) {
         insert([generateEmptyCell()], position, ['rows', {_key: r._key}, 'cells', index])
       )
       onChange(columnInserts)
-    },
-    [onChange, value]
-  )
-
-  const handleDuplicateRow = React.useCallback(
-    (index: number) => {
-      const {rows = []} = value || {}
-      const clickedRow = rows[index]
-      const newRow = {
-        ...clickedRow,
-        _key: randomKey(12),
-        cells: clickedRow?.cells?.length
-          ? clickedRow.cells.map((cell) => ({
-              ...cell,
-              _key: randomKey(12),
-            }))
-          : [],
-      }
-      const rowInsert = insert([newRow], 'after', ['rows', index])
-
-      onChange([rowInsert])
     },
     [onChange, value]
   )
@@ -367,7 +312,7 @@ export default function TableInput(props: ObjectInputProps<TableValue>) {
 
                     return (
                       <Row key={rowIndex}>
-                        {row.map((cell, cellIndex) => {
+                        {row.map((cell) => {
                           const position = generatePositionFromString(cell.item.value._key)
 
                           const allValidations = cell.item.members.reduce((acc, cellMember) => {
@@ -429,6 +374,10 @@ export default function TableInput(props: ObjectInputProps<TableValue>) {
                           rowIndex={rowIndex + 1}
                           rowIsLast={rowIsLast}
                           rowIsFirst={rowIsFirst}
+                          rowOrder={firstCellPosition.row}
+                          onChange={onChange}
+                          value={value}
+                          lastColNumber={lastColNumber}
                         />
                       </Row>
                     )
@@ -489,43 +438,7 @@ export default function TableInput(props: ObjectInputProps<TableValue>) {
                             onClick={() => handleInsertRow(-1, 'after')}
                           />
                         ) : (
-                          <Flex gap={3} align="flex-end">
-                            <Stack space={2}>
-                              <Text weight="medium" size={1}>
-                                Columns
-                              </Text>
-                              <TextInput
-                                value={initColumnsCount}
-                                type="number"
-                                onChange={(e) =>
-                                  parseInt(e.target.value, 10) > 0
-                                    ? setInitColumnsCount(parseInt(e.target.value, 10))
-                                    : null
-                                }
-                              />
-                            </Stack>
-                            <Stack space={2}>
-                              <Text weight="medium" size={1}>
-                                Columns
-                              </Text>
-                              <TextInput
-                                value={initRowsCount}
-                                type="number"
-                                onChange={(e) =>
-                                  parseInt(e.target.value, 10) > 0
-                                    ? setInitRowsCount(parseInt(e.target.value, 10))
-                                    : null
-                                }
-                              />
-                            </Stack>
-                            <Button
-                              mode="ghost"
-                              text={`Create ${initColumnsCount} × ${initRowsCount} table`}
-                              icon={AddIcon}
-                              disabled={initColumnsCount < 1 || initRowsCount < 1}
-                              onClick={() => handleInsertTable(initColumnsCount, initRowsCount)}
-                            />
-                          </Flex>
+                          <TableCreate onChange={onChange} />
                         )}
                       </Stack>
                     </Cell>
@@ -533,11 +446,8 @@ export default function TableInput(props: ObjectInputProps<TableValue>) {
                 </tfoot>
               </Table>
 
-              {/* Rendered but hidden to render modals when focusPath updated */}
-              <div style={{display: `none`}}>
-                {props.renderDefault(props)}
-                {/* {props.focusPath.length ? props.renderDefault(props) : null} */}
-              </div>
+              {/* Rendered but hidden to render modals when focusPath is updated */}
+              <div style={{display: `none`}}>{props.renderDefault(props)}</div>
             </React.Fragment>
           )
         })

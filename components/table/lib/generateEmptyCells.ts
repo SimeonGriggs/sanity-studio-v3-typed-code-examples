@@ -1,27 +1,38 @@
-import {LexoDecimal, LexoRank} from 'lexorank'
+import {LexoRank} from 'lexorank'
 import {CellValue} from '../types'
 import {generateEmptyCell} from './generateEmptyCell'
 import {generatePositionString} from './generatePositionString'
+import {generateMultipleOrderRanks} from './generateMultipleOrderRanks'
 
-export function generateEmptyCells({rows, cols}: {rows: number; cols: number}): CellValue[] {
+type EmptyCellsConfig = {
+  rows: number
+  rowMinOrder?: string
+  rowMaxOrder?: string
+  cols: number
+  colMinOrder?: string
+  colMaxOrder?: string
+}
+
+export function generateEmptyCells(config: EmptyCellsConfig): CellValue[] {
+  const {rows, cols} = config
+
+  const rowMinOrder = config.rowMinOrder ? LexoRank.parse(config.rowMinOrder) : undefined
+  const rowMaxOrder = config.rowMaxOrder ? LexoRank.parse(config.rowMaxOrder) : undefined
+  const colMinOrder = config.colMinOrder ? LexoRank.parse(config.colMinOrder) : undefined
+  const colMaxOrder = config.colMaxOrder ? LexoRank.parse(config.colMaxOrder) : undefined
+
   const cellCount = rows * cols
+  const rowRanks = generateMultipleOrderRanks(rows, rowMinOrder, rowMaxOrder)
+  const colRanks = generateMultipleOrderRanks(cols, colMinOrder, colMaxOrder)
+
+  let rowIndex = 0
+  let colIndex = 0
+
   const cells = [...Array(cellCount)].map(() => generateEmptyCell())
-  let rowLexo = LexoRank.min()
-  let colLexo = LexoRank.min()
-  let newRow = true
 
   for (let cellIndex = 0; cellIndex < cells.length; cellIndex++) {
-    if (newRow) {
-      rowLexo = LexoRank.parse(rowLexo.toString()).genNext().genNext()
-      colLexo = LexoRank.min()
-      newRow = false
-    } else {
-      colLexo = LexoRank.parse(colLexo.toString()).genNext().genNext()
-    }
-
-    if (cellIndex % cols === cols - 1) {
-      newRow = true
-    }
+    const rowLexo = rowRanks[rowIndex]
+    const colLexo = colRanks[colIndex]
 
     cells[cellIndex]._key = generatePositionString({
       col: colLexo.toString(),
@@ -30,8 +41,18 @@ export function generateEmptyCells({rows, cols}: {rows: number; cols: number}): 
       rowSpan: 1,
     })
 
+    colIndex++
+    if (colIndex >= cols) {
+      rowIndex++
+      colIndex = 0
+    }
+
+    // TODO: Debugging only
     cells[cellIndex].value = `${cellIndex}`
   }
+
+  // Re-sort for good measure
+  cells.sort((a, b) => a._key.localeCompare(b._key))
 
   return cells
 }
