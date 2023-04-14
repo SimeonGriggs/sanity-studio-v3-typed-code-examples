@@ -48,15 +48,18 @@ export default function RowControls(props: RowControlsProps) {
       // Calculate path for insertion in the flat "cells" array
       // Not actually required, because we don't use that order, but nice to have
       const rowCells = cells.filter((c) => c._key.startsWith(rowOrder))
-      const lastRowCellKey = rowCells[rowCells.length - 1]._key
-      const firstRowCellKey = rowCells[0]._key
-      const insertPath = ['cells', {_key: position === 'after' ? lastRowCellKey : firstRowCellKey}]
+      const lastRowCellRank = rowCells[rowCells.length - 1]._key
+      const firstRowCellRank = rowCells[0]._key
+      const insertPath = [
+        'cells',
+        {_key: position === 'after' ? lastRowCellRank : firstRowCellRank},
+      ]
 
       // Generate new rank for this row
       const otherRowCellIndex =
         position === 'after'
-          ? cells.findIndex((c) => c._key === lastRowCellKey)
-          : cells.findIndex((c) => c._key === firstRowCellKey)
+          ? cells.findIndex((c) => c._key === lastRowCellRank)
+          : cells.findIndex((c) => c._key === firstRowCellRank)
 
       let newRowRank: string
 
@@ -73,11 +76,11 @@ export default function RowControls(props: RowControlsProps) {
             ? LexoRank.parse(rowOrder).genNext().toString()
             : LexoRank.parse(rowOrder).genPrev().toString()
       } else {
-        const otherRowCellKey =
+        const otherRowCellRank =
           position === 'after'
             ? generatePositionFromString(cells[otherRowCellIndex + 1]._key).row
             : generatePositionFromString(cells[otherRowCellIndex - 1]._key).row
-        newRowRank = LexoRank.parse(rowOrder).between(LexoRank.parse(otherRowCellKey)).toString()
+        newRowRank = LexoRank.parse(rowOrder).between(LexoRank.parse(otherRowCellRank)).toString()
       }
 
       // Map over the cells in the row and generate new cells
@@ -100,8 +103,6 @@ export default function RowControls(props: RowControlsProps) {
           _type: c._type,
         }
       })
-
-      console.log({newRow})
 
       if (newRow.length) {
         const rowInsert = insert(newRow, position, insertPath)

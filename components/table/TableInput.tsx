@@ -41,18 +41,8 @@ export default function TableInput(props: ObjectInputProps<TableValue>) {
 
   const [nativeInput, setNativeInput] = React.useState(false)
   const [cellControls, setCellControls] = React.useState(false)
-  const [initColumnsCount, setInitColumnsCount] = React.useState(3)
-  const [initRowsCount, setInitRowsCount] = React.useState(2)
 
-  const {onPathOpen, formState} = useDocumentPane()
-
-  // Open modal of an object field
-  const handleSetFocus = React.useCallback(
-    (path: Path) => {
-      onPathOpen(path)
-    },
-    [onPathOpen]
-  )
+  const {formState} = useDocumentPane()
 
   const [focused, setFocused] = React.useState<CellPosition | null>(null)
 
@@ -144,32 +134,6 @@ export default function TableInput(props: ObjectInputProps<TableValue>) {
       console.error(error.message)
     }
   }, [onChange, toast])
-
-  const handleRemoveColumn = React.useCallback(
-    (index: number) => {
-      if (!value?.rows?.length) {
-        return
-      }
-
-      const columnUnsets = value.rows.map((r) => unset(['rows', {_key: r._key}, 'cells', index]))
-      onChange(columnUnsets)
-    },
-    [onChange, value]
-  )
-
-  const handleInsertColumn = React.useCallback(
-    (index: number, position: FormInsertPatchPosition) => {
-      if (!value?.rows?.length) {
-        return
-      }
-
-      const columnInserts = value.rows.map((r) =>
-        insert([generateEmptyCell()], position, ['rows', {_key: r._key}, 'cells', index])
-      )
-      onChange(columnInserts)
-    },
-    [onChange, value]
-  )
 
   const handleDuplicateColumn = React.useCallback(
     (index: number) => {
@@ -289,11 +253,13 @@ export default function TableInput(props: ObjectInputProps<TableValue>) {
           return (
             <React.Fragment key={tableMember.key}>
               <Table>
-                {lastColNumber > 0 ? (
+                {lastColNumber > 0 && value ? (
                   <ColControls
                     count={lastColNumber}
                     focused={focused}
                     firstRow={consolidatedRowsAndCells[0]}
+                    onChange={onChange}
+                    value={value}
                   >
                     <TableControls />
                   </ColControls>

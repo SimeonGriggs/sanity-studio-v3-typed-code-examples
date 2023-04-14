@@ -1,9 +1,21 @@
 import React from 'react'
 import {Button, MenuButton, Menu, MenuItem, MenuDivider} from '@sanity/ui'
 import {ResetIcon, EllipsisVerticalIcon, EyeOpenIcon, RemoveCircleIcon} from '@sanity/icons'
+import {useDocumentPane} from 'sanity/desk'
+import {Path} from 'sanity'
 
 export default function CellControls() {
   const row = {key: 'asdf'}
+
+  const {onPathOpen} = useDocumentPane()
+
+  // Open modal of an object field
+  const handleSetFocus = React.useCallback(
+    (path: Path) => {
+      onPathOpen(path)
+    },
+    [onPathOpen]
+  )
 
   return (
     <MenuButton
