@@ -12,6 +12,9 @@ import {tableSchema} from './table'
 import seminar from './hosts/seminar'
 import hosts from './hosts/hosts'
 import person from './hosts/person'
+import readingList from './readingList/readingList'
+import recommendation from './readingList/recommendation'
+import book from './readingList/book'
 
 export const schemaTypes = [
   // Custom string example
@@ -28,6 +31,10 @@ export const schemaTypes = [
   seminar,
   hosts,
   person,
+  // Interactive array item example
+  readingList,
+  recommendation,
+  book,
   // Complex examples:
   // Custom object example
   location,
