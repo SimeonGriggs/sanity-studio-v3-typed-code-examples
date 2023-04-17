@@ -2,9 +2,24 @@
 
 I'd like to turn these into guides. If I haven't done this already, bug me on [Slack](https://slack.sanity.io/).
 
-## Objects
+## Custom Inputs
 
 See the [Form Components docs on sanity.io](https://www.sanity.io/docs/form-components-reference) for more details.
+
+- [Sanity Studio v3: Typed Code Examples](#sanity-studio-v3-typed-code-examples)
+  - [Custom Inputs](#custom-inputs)
+    - [String](#string)
+    - [Objects](#objects)
+    - [Arrays of Objects](#arrays-of-objects)
+  - [Tools](#tools)
+
+### String
+
+The `store` document type contains an example `CouponGenerator` custom input.
+
+![Coupon Generator custom string input](img/coupon-generator.png)
+
+### Objects
 
 Custom components for schema items can be loaded at four different points, and they display a little differently.
 
@@ -21,15 +36,15 @@ Getting the Types to play nicely can be complicated, so in this repo are code ex
 
 See `./components/` for examples.
 
-## Arrays of Objects
+### Arrays of Objects
 
-The `report` document type features a `table` schema which demonstrates a *very* complex custom input component.
+The `report` document type features a `table` schema which demonstrates a _very_ complex custom input component.
 
 It is setup like:
 
-* a `table` is an `object` with an `array` of `rows`
-* each `row` is an `object` with an `array` of `cells`
-* each `cell` is an `object` with whatever fields you like
+- a `table` is an `object` with an `array` of `rows`
+- each `row` is an `object` with an `array` of `cells`
+- each `cell` is an `object` with whatever fields you like
 
 The custom input controls all of this from the root level and allows editing without clicking into modals. With the option to open the modal for more details about the field.
 
