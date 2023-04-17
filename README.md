@@ -11,13 +11,14 @@ See the [Form Components docs on sanity.io](https://www.sanity.io/docs/form-comp
     - [String input](#string-input)
     - [Number input](#number-input)
     - [Object input](#object-input)
+    - [Decorated array input](#decorated-array-input)
     - [Object: All component levels](#object-all-component-levels)
     - [Arrays of Objects](#arrays-of-objects)
   - [Tools](#tools)
 
 ### String input
 
-The `store` document type contains an example `CouponGenerator` custom input.
+The `store` document type contains an example `CouponGenerator` custom input. Click the "Generate Coupon" button to create a random string and populate the field.
 
 ![Coupon Generator custom string input](img/coupon-generator.png)
 
@@ -25,7 +26,7 @@ The `store` document type contains an example `CouponGenerator` custom input.
 
 ### Number input
 
-The `survey` document type contains an example `RatingSelector` custom input.
+The `survey` document type contains an example `RatingSelector` custom input. Click buttons 1-10 to set a number on the field.
 
 ![Rating Selector custom number input](img/rating-selector.png)
 
@@ -33,11 +34,17 @@ The `survey` document type contains an example `RatingSelector` custom input.
 
 ### Object input
 
-The `promotion` document type contains an example `DurationInput` custom input.
+The `promotion` document type contains an example `DurationInput` custom input. This demonstrates how to make fine-grained and whole-field changes to a field.
 
 ![Duration Input custom object input](img/duration-input.png)
 
 ---
+
+### Decorated array input
+
+The `seminar` document type contains an example `HostsSelector` custom input. This demonstrates how to add extra buttons below an array field to quickly add items to the array.
+
+![Hosts Selector custom array input](img/hosts-selector.png)
 
 ### Object: All component levels
 
