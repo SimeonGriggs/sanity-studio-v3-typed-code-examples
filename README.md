@@ -8,25 +8,38 @@ See the [Form Components docs on sanity.io](https://www.sanity.io/docs/form-comp
 
 - [Sanity Studio v3: Typed Code Examples](#sanity-studio-v3-typed-code-examples)
   - [Custom Inputs](#custom-inputs)
-    - [String](#string)
-    - [Number](#number)
-    - [Objects](#objects)
+    - [String input](#string-input)
+    - [Number input](#number-input)
+    - [Object input](#object-input)
+    - [Object: All component levels](#object-all-component-levels)
     - [Arrays of Objects](#arrays-of-objects)
   - [Tools](#tools)
 
-### String
+### String input
 
 The `store` document type contains an example `CouponGenerator` custom input.
 
 ![Coupon Generator custom string input](img/coupon-generator.png)
 
-### Number
+---
+
+### Number input
 
 The `survey` document type contains an example `RatingSelector` custom input.
 
 ![Rating Selector custom number input](img/rating-selector.png)
 
-### Objects
+---
+
+### Object input
+
+The `promotion` document type contains an example `DurationInput` custom input.
+
+![Duration Input custom object input](img/duration-input.png)
+
+---
+
+### Object: All component levels
 
 Custom components for schema items can be loaded at four different points, and they display a little differently.
 
