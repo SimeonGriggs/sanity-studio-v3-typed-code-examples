@@ -1,5 +1,5 @@
 import {defineType} from 'sanity'
-import CouponGeneratorDummy from './CouponGeneratorDummy'
+// import CouponGeneratorDummy from './CouponGeneratorDummy'
 import CouponGenerator from './CouponGenerator'
 
 export default defineType({
