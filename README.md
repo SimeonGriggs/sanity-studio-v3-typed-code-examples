@@ -12,6 +12,7 @@ See the [Form Components docs on sanity.io](https://www.sanity.io/docs/form-comp
     - [Number input](#number-input)
     - [Object input](#object-input)
     - [Decorated array input](#decorated-array-input)
+    - [Interactive array item](#interactive-array-item)
     - [Object: All component levels](#object-all-component-levels)
     - [Arrays of Objects](#arrays-of-objects)
   - [Tools](#tools)
@@ -46,6 +47,12 @@ The `seminar` document type contains an example `HostsSelector` custom input. Th
 
 ![Hosts Selector custom array input](img/hosts-selector.png)
 
+### Interactive array item
+
+The `readingList` document type contains an example `FeaturedItem` custom input. This shows how to make array items that write changes to the document itself.
+
+![Featured Item custom array item](img/featured-item.png)
+
 ### Object: All component levels
 
 Custom components for schema items can be loaded at four different points, and they display a little differently.
@@ -72,6 +79,8 @@ It is setup like:
 - a `table` is an `object` with an `array` of `rows`
 - each `row` is an `object` with an `array` of `cells`
 - each `cell` is an `object` with whatever fields you like
+
+---
 
 The custom input controls all of this from the root level and allows editing without clicking into modals. With the option to open the modal for more details about the field.
 
