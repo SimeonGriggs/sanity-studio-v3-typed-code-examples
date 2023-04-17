@@ -6,6 +6,8 @@ export const structure: StructureResolver = (S) =>
     .items([
       // Showcases a custom string
       S.documentTypeListItem('store').title('Store'),
+      // Showcases a custom number
+      S.documentTypeListItem('survey').title('Survey'),
       // Showcases a custom object
       S.documentTypeListItem('location').title('Locations'),
       // Showcases a custom table input

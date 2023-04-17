@@ -9,6 +9,7 @@ See the [Form Components docs on sanity.io](https://www.sanity.io/docs/form-comp
 - [Sanity Studio v3: Typed Code Examples](#sanity-studio-v3-typed-code-examples)
   - [Custom Inputs](#custom-inputs)
     - [String](#string)
+    - [Number](#number)
     - [Objects](#objects)
     - [Arrays of Objects](#arrays-of-objects)
   - [Tools](#tools)
@@ -18,6 +19,12 @@ See the [Form Components docs on sanity.io](https://www.sanity.io/docs/form-comp
 The `store` document type contains an example `CouponGenerator` custom input.
 
 ![Coupon Generator custom string input](img/coupon-generator.png)
+
+### Number
+
+The `survey` document type contains an example `RatingSelector` custom input.
+
+![Rating Selector custom number input](img/rating-selector.png)
 
 ### Objects
 
