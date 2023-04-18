@@ -8,21 +8,31 @@ See the [Form Components docs on sanity.io](https://www.sanity.io/docs/form-comp
 
 - [Sanity Studio v3: Typed Code Examples](#sanity-studio-v3-typed-code-examples)
   - [Custom Inputs](#custom-inputs)
-    - [String input](#string-input)
+    - [String generator input](#string-generator-input)
+    - [String selector input](#string-selector-input)
     - [Number input](#number-input)
     - [Object input](#object-input)
     - [Decorated array input](#decorated-array-input)
     - [Interactive array item](#interactive-array-item)
     - [Array preview](#array-preview)
+    - [Document root-level component](#document-root-level-component)
     - [Object: All component levels](#object-all-component-levels)
     - [Arrays of Objects](#arrays-of-objects)
   - [Tools](#tools)
 
-### String input
+### String generator input
 
 The `store` document type contains an example `CouponGenerator` custom input. Click the "Generate Coupon" button to create a random string and populate the field.
 
 ![Coupon Generator custom string input](img/coupon-generator.png)
+
+---
+
+### String selector input
+
+The `plan` document type contains an example `PlanSelector` custom input. This shows how you can create buttons which are more visually interesting to select values
+
+![Plan Selector custom string input](img/plan-selector.png)
 
 ---
 
@@ -48,17 +58,31 @@ The `seminar` document type contains an example `HostsSelector` custom input. Th
 
 ![Hosts Selector custom array input](img/hosts-selector.png)
 
+---
+
 ### Interactive array item
 
 The `readingList` document type contains an example `FeaturedItem` custom input. This shows how to make array items that write changes to the document itself.
 
 ![Featured Item custom array item](img/featured-item.png)
 
+---
+
 ### Array preview
 
 The `campaign` document type contains an example `OfferPreview` form component. This demonstrates how to create a richer preview for an array item with contextual values.
 
 ![Offer Preview custom array preview](img/offer-preview.png)
+
+---
+
+### Document root-level component
+
+The `preflight` document type demonstrates loading a custom component at the root level of the document.
+
+![Root-level custom component](img/root-level-component.png)
+
+---
 
 ### Object: All component levels
 

@@ -19,6 +19,7 @@ import recommendation from './readingList/recommendation'
 import book from './readingList/book'
 import campaign from './offer/campaign'
 import offer from './offer/offer'
+import preflight from './progress/preflight'
 
 export const schemaTypes = [
   // Custom string generator example
@@ -52,4 +53,6 @@ export const schemaTypes = [
   // Custom array of objects example
   report,
   tableSchema,
+  // Root level
+  preflight,
 ]

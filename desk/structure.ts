@@ -25,6 +25,9 @@ export const structure: StructureResolver = (S) =>
       S.documentTypeListItem('campaign').title('Campaign (Rich Array Item Previews)'),
       S.documentTypeListItem('offer').title('Offer'),
       S.divider(),
+      // A root-level component
+      S.documentTypeListItem('preflight').title('Preflight (Root level)'),
+      S.divider(),
       // More complex examples
       // Showcases a custom object
       S.documentTypeListItem('location').title('Locations'),
