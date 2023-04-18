@@ -15,6 +15,8 @@ import person from './hosts/person'
 import readingList from './readingList/readingList'
 import recommendation from './readingList/recommendation'
 import book from './readingList/book'
+import campaign from './offer/campaign'
+import offer from './offer/offer'
 
 export const schemaTypes = [
   // Custom string example
@@ -35,6 +37,9 @@ export const schemaTypes = [
   readingList,
   recommendation,
   book,
+  // Rich array item preview example
+  campaign,
+  offer,
   // Complex examples:
   // Custom object example
   location,
