@@ -4,8 +4,10 @@ export const structure: StructureResolver = (S) =>
   S.list()
     .title('Content')
     .items([
-      // Showcases a custom string
-      S.documentTypeListItem('store').title('Store (String)'),
+      // Showcases a custom string generator
+      S.documentTypeListItem('store').title('Store (String Generator)'),
+      // Showcases a custom string selector
+      S.documentTypeListItem('feature').title('Feature (String Selector)'),
       // Showcases a custom number
       S.documentTypeListItem('survey').title('Survey (Number)'),
       // Showcases a custom object

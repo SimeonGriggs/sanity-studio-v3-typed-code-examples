@@ -1,5 +1,7 @@
 import coordinate from './coordinate'
 import coupon from './coupon/coupon'
+import feature from './plan/feature'
+import plan from './plan/plan'
 import store from './coupon/store'
 import location from './location'
 import duration from './duration/promotion'
@@ -19,9 +21,12 @@ import campaign from './offer/campaign'
 import offer from './offer/offer'
 
 export const schemaTypes = [
-  // Custom string example
+  // Custom string generator example
   store,
   coupon,
+  // Custom string selector example
+  feature,
+  plan,
   // Custom number example
   survey,
   rating,
