@@ -18,8 +18,12 @@ export const structure: StructureResolver = (S) =>
       // Showcases an array with extra interactive items
       S.documentTypeListItem('readingList').title('Reading List (Interactive Array Items)'),
       S.documentTypeListItem('book').title('Book'),
-      // More complex examples
       S.divider(),
+      // Showcases an array with rich item previews
+      S.documentTypeListItem('campaign').title('Campaign (Rich Array Item Previews)'),
+      S.documentTypeListItem('offer').title('Offer'),
+      S.divider(),
+      // More complex examples
       // Showcases a custom object
       S.documentTypeListItem('location').title('Locations'),
       // Showcases a custom table input

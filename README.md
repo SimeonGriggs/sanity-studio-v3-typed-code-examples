@@ -13,6 +13,7 @@ See the [Form Components docs on sanity.io](https://www.sanity.io/docs/form-comp
     - [Object input](#object-input)
     - [Decorated array input](#decorated-array-input)
     - [Interactive array item](#interactive-array-item)
+    - [Array preview](#array-preview)
     - [Object: All component levels](#object-all-component-levels)
     - [Arrays of Objects](#arrays-of-objects)
   - [Tools](#tools)
@@ -52,6 +53,12 @@ The `seminar` document type contains an example `HostsSelector` custom input. Th
 The `readingList` document type contains an example `FeaturedItem` custom input. This shows how to make array items that write changes to the document itself.
 
 ![Featured Item custom array item](img/featured-item.png)
+
+### Array preview
+
+The `campaign` document type contains an example `OfferPreview` form component. This demonstrates how to create a richer preview for an array item with contextual values.
+
+![Offer Preview custom array preview](img/offer-preview.png)
 
 ### Object: All component levels
 
