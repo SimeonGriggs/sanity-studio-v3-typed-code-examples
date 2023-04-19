@@ -8,6 +8,7 @@ import {routedToolPlugin} from './plugins/routedTool'
 import {structure} from './desk/structure'
 import Progress from './schemas/progress/Progress'
 import ProgressDummy from './schemas/progress/ProgressDummy'
+import Padding from './components/Padding'
 
 export default defineConfig({
   name: 'default',
@@ -30,12 +31,16 @@ export default defineConfig({
           props.schemaType.name === 'preflight'
         ) {
           return (
-            <Stack space={4}>
-              <Progress members={props.members} />
-              {/* <ProgressDummy members={props.members} /> */}
-              {props.renderDefault(props)}
-            </Stack>
+            <Padding>
+              <Stack space={4}>
+                <Progress members={props.members} />
+                {/* <ProgressDummy members={props.members} /> */}
+                {props.renderDefault(props)}
+              </Stack>
+            </Padding>
           )
+        } else if (props.id === 'root') {
+          return <Padding>{props.renderDefault(props)}</Padding>
         }
 
         return props.renderDefault(props)

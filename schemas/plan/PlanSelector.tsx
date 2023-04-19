@@ -30,7 +30,7 @@ export default function PlanSelector(props: StringInputProps) {
           tone={value === plan.id ? `primary` : `default`}
           onClick={handleClick}
         >
-          <Stack space={3} padding={3}>
+          <Stack space={3} padding={2}>
             <Text size={4} align="right">
               {React.createElement(plan.icon)}
             </Text>
