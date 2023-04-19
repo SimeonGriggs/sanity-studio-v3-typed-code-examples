@@ -1,5 +1,5 @@
 import {defineType} from 'sanity'
-// import CouponGeneratorDummy from './CouponGeneratorDummy'
+import CouponGeneratorDummy from './CouponGeneratorDummy'
 import CouponGenerator from './CouponGenerator'
 
 export default defineType({
@@ -11,6 +11,6 @@ export default defineType({
       .min(4)
       .max(4)
       .regex(/^[A-Z0-9]+$/),
-  //   components: {input: CouponGeneratorDummy},
+  // components: {input: CouponGeneratorDummy},
   components: {input: CouponGenerator},
 })
