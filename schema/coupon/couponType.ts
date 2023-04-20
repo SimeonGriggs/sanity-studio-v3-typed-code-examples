@@ -1,8 +1,8 @@
 import {defineType} from 'sanity'
-import CouponGeneratorDummy from './CouponGeneratorDummy'
-import CouponGenerator from './CouponGenerator'
+// import {CouponInput} from './CouponInputDummy'
+import {CouponInput} from './CouponInput'
 
-export default defineType({
+export const couponType = defineType({
   name: 'coupon',
   description: 'A unique, all uppercase, four-character alphanumeric code',
   type: 'string',
@@ -11,6 +11,5 @@ export default defineType({
       .min(4)
       .max(4)
       .regex(/^[A-Z0-9]+$/),
-  // components: {input: CouponGeneratorDummy},
-  components: {input: CouponGenerator},
+  components: {input: CouponInput},
 })

@@ -1,6 +1,6 @@
 import {defineField, defineType} from 'sanity'
 
-export default defineType({
+export const storeType = defineType({
   name: 'store',
   type: 'document',
   fields: [

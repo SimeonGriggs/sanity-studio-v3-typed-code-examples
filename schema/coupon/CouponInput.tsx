@@ -3,7 +3,7 @@ import React from 'react'
 import type {StringInputProps} from 'sanity'
 import {set} from 'sanity'
 
-export default function CodeGenerator(props: StringInputProps) {
+export function CouponInput(props: StringInputProps) {
   // onChange handles patches to this field
   const {onChange} = props
 
