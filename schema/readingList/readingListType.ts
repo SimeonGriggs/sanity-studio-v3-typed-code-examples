@@ -3,6 +3,7 @@ import {Recommendation} from './recommendationType'
 
 export const readingListType = defineType({
   name: 'readingList',
+  title: 'Reading list',
   type: 'document',
   fields: [
     defineField({

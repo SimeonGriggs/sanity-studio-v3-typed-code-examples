@@ -1,6 +1,5 @@
 import {Box, Button, Code, Flex} from '@sanity/ui'
-import type {StringInputProps} from 'sanity'
-import {set} from 'sanity'
+import {set, StringInputProps} from 'sanity'
 import {useCallback} from 'react'
 
 export function CouponInput(props: StringInputProps) {

@@ -3,6 +3,7 @@ import {DurationInput} from './DurationInput'
 
 export const durationType = defineType({
   name: 'duration',
+  title: 'Duration',
   description: 'A start and finish time for a promotion',
   type: 'object',
   fields: [

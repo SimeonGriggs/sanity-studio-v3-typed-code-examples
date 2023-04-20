@@ -9,6 +9,7 @@ export const DEPARTMENTS = [
 
 export const personType = defineType({
   name: 'person',
+  title: 'Person',
   type: 'document',
   icon: UserIcon,
   fields: [

@@ -13,6 +13,7 @@ export const ALLOWED_TIMES = () => {
 
 export const timeValueType = defineType({
   name: 'timeValue',
+  title: 'Time',
   type: 'string',
   options: {
     list: ALLOWED_TIMES(),

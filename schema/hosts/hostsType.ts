@@ -3,6 +3,7 @@ import {HostsInput} from './HostsInput'
 
 export const hostsType = defineType({
   name: 'hosts',
+  title: 'Hosts',
   type: 'array',
   of: [
     defineField({

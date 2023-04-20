@@ -2,6 +2,7 @@ import {defineType, defineField} from 'sanity'
 
 export const preflightType = defineType({
   name: 'preflight',
+  title: 'Preflight',
   type: 'document',
   fields: [
     defineField({
