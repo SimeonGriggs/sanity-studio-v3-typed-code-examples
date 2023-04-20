@@ -1,10 +1,10 @@
 import {defineType} from 'sanity'
 
-import RatingSelector from './RatingSelector'
+import {RatingInput} from './RatingInput'
 
-export default defineType({
+export const ratingType = defineType({
   name: 'rating',
   type: 'number',
   validation: (rule) => rule.min(1).max(10),
-  components: {input: RatingSelector},
+  components: {input: RatingInput},
 })

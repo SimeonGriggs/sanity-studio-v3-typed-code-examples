@@ -7,8 +7,7 @@ import location from './location'
 import duration from './duration/promotion'
 import promotion from './duration/duration'
 import timeIncrement from './duration/timeIncrement'
-import rating from './rating/rating'
-import survey from './rating/survey'
+import {surveyType} from './rating/surveyType'
 import report from './report'
 import {tableSchema} from './table'
 import seminar from './hosts/seminar'
@@ -20,6 +19,7 @@ import book from './readingList/book'
 import campaign from './offer/campaign'
 import offer from './offer/offer'
 import preflight from './progress/preflight'
+import {ratingType} from './rating/ratingType'
 
 export const schemaTypes = [
   // Custom string generator example
@@ -29,8 +29,8 @@ export const schemaTypes = [
   featureType,
   planType,
   // Custom number example
-  survey,
-  rating,
+  surveyType,
+  ratingType,
   // Custom object example
   promotion,
   duration,

@@ -1,6 +1,6 @@
 import {defineField, defineType} from 'sanity'
 
-export default defineType({
+export const surveyType = defineType({
   name: 'survey',
   type: 'document',
   fields: [

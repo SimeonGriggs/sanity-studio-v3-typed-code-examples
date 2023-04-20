@@ -1,16 +1,16 @@
 import {Grid, Button} from '@sanity/ui'
 import {NumberInputProps, set} from 'sanity'
-import React from 'react'
+import {useCallback} from 'react'
 
 const MAX_RATING = 10
 
-export default function RatingSelector(props: NumberInputProps) {
+export function RatingInput(props: NumberInputProps) {
   const {onChange, value} = props
 
-  const handleScore = React.useCallback(
+  const handleScore = useCallback(
     (event: React.MouseEvent<HTMLButtonElement>) => {
-      const value = Number(event.currentTarget.value)
-      onChange(set(value))
+      const newValue = Number(event.currentTarget.value)
+      onChange(set(newValue))
     },
     [onChange]
   )
