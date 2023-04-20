@@ -10,6 +10,7 @@ export const PLANS = [
 
 export const planType = defineType({
   name: 'plan',
+  title: 'Plan',
   type: 'string',
   options: {
     list: PLANS.map(({title, value}) => ({title, value})),

@@ -4,6 +4,7 @@ import {CouponInput} from './CouponInput'
 
 export const couponType = defineType({
   name: 'coupon',
+  title: 'Coupon',
   description: 'A unique, all uppercase, four-character alphanumeric code',
   type: 'string',
   validation: (rule) =>

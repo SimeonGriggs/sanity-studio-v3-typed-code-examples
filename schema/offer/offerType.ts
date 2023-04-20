@@ -4,6 +4,7 @@ import {OfferPreview} from './OfferPreview'
 
 export const offerType = defineType({
   name: 'offer',
+  title: 'Offer',
   type: 'object',
   icon: TagIcon,
   fields: [

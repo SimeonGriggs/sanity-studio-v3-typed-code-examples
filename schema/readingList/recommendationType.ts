@@ -10,6 +10,7 @@ export type Recommendation = {
 
 export const recommendationType = defineType({
   name: 'recommendation',
+  title: 'Recommendation',
   type: 'object',
   fields: [
     defineField({
