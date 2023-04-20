@@ -1,7 +1,7 @@
 import {defineType} from 'sanity'
-import PlanSelector from './PlanSelector'
+import {PlanInput} from './PlanInput'
 
-export default defineType({
+export const planType = defineType({
   name: 'plan',
   type: 'string',
   options: {
@@ -12,5 +12,5 @@ export default defineType({
     ],
     layout: 'radio',
   },
-  components: {input: PlanSelector},
+  components: {input: PlanInput},
 })
