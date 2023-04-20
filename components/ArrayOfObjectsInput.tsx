@@ -12,9 +12,9 @@ export default function ArrayOfObjectsInput(props: ArrayOfObjectsInputProps<{_ke
 
   // When selected, add a new item to the end of the array
   const handleChange = React.useCallback(
-    (newValue: string) => {
-      onChange(insert([{_type: newValue, _key: randomKey(12)}], 'after', [-1]))
-      setValue(newValue)
+    (nextValue: string) => {
+      onChange(insert([{_type: nextValue, _key: randomKey(12)}], 'after', [-1]))
+      setValue(nextValue)
       setTimeout(() => setValue(''), 0)
     },
     [onChange]
