@@ -1,13 +1,7 @@
 import {StringInputProps, set} from 'sanity'
 import {Stack, Button, Grid, Label, Text} from '@sanity/ui'
-import {UserIcon, UsersIcon, EarthGlobeIcon} from '@sanity/icons'
 import {useCallback, createElement} from 'react'
-
-const PLANS = [
-  {icon: UserIcon, id: 'free', title: 'Free', description: 'For personal use'},
-  {icon: UsersIcon, id: 'premium', title: 'Premium', description: 'For small teams'},
-  {icon: EarthGlobeIcon, id: 'enterprise', title: 'Enterprise', description: 'For large teams'},
-]
+import {PLANS} from './planType'
 
 export function PlanInput(props: StringInputProps) {
   const {value, onChange} = props
@@ -24,10 +18,10 @@ export function PlanInput(props: StringInputProps) {
     <Grid columns={PLANS.length} gap={3}>
       {PLANS.map((plan) => (
         <Button
-          key={plan.id}
-          value={plan.id}
-          mode={value === plan.id ? `default` : `ghost`}
-          tone={value === plan.id ? `primary` : `default`}
+          key={plan.value}
+          value={plan.value}
+          mode={value === plan.value ? `default` : `ghost`}
+          tone={value === plan.value ? `primary` : `default`}
           onClick={handleClick}
         >
           <Stack space={3} padding={2}>

@@ -7,7 +7,7 @@ export const DEPARTMENTS = [
   {title: 'Marketing', value: 'marketing'},
 ]
 
-export default defineType({
+export const personType = defineType({
   name: 'person',
   type: 'document',
   icon: UserIcon,

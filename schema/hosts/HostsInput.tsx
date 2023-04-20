@@ -2,16 +2,16 @@ import {Grid, Stack, Button} from '@sanity/ui'
 import {AddIcon} from '@sanity/icons'
 import {randomKey} from '@sanity/util/content'
 import {ArrayOfObjectsInputProps, Reference, insert, setIfMissing, useClient} from 'sanity'
-import React from 'react'
-import {DEPARTMENTS} from './person'
+import {useCallback} from 'react'
+import {DEPARTMENTS} from './personType'
 
-export default function HostsSelector(props: ArrayOfObjectsInputProps) {
+export function HostsInput(props: ArrayOfObjectsInputProps) {
   const {onChange} = props
 
   const client = useClient({apiVersion: `2023-04-01`})
 
   // When a department button is clicked
-  const handleClick = React.useCallback(
+  const handleClick = useCallback(
     async (event: React.MouseEvent<HTMLButtonElement>) => {
       // Find the value of the button, the department name
       const department = event.currentTarget.value

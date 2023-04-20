@@ -1,10 +1,10 @@
-import React from 'react'
 import {ObjectItemProps, PatchEvent, set, useFormValue} from 'sanity'
 import {Box, Flex, Switch} from '@sanity/ui'
 import {useDocumentPane} from 'sanity/desk'
-import {Recommendation} from './recommendation'
+import {useCallback} from 'react'
+import {Recommendation} from './recommendationType'
 
-export default function FeaturedItem(props: ObjectItemProps<Recommendation>) {
+export function RecommendationItem(props: ObjectItemProps<Recommendation>) {
   const {value, path} = props
 
   // "Item" components lack "onChange", but we can get it from useDocumentPane()
@@ -15,8 +15,8 @@ export default function FeaturedItem(props: ObjectItemProps<Recommendation>) {
   const parentPath = path.slice(0, -1)
   const allItems = useFormValue(parentPath) as Recommendation[]
 
-  const handleClick = React.useCallback(() => {
-    const newValue = value?.featured ? false : true
+  const handleClick = useCallback(() => {
+    const nextValue = value?.featured ? false : true
     const clickedFeaturedPath = [...path, 'featured']
     const otherFeaturedPaths = allItems.length
       ? allItems
@@ -30,7 +30,7 @@ export default function FeaturedItem(props: ObjectItemProps<Recommendation>) {
     onChange(
       PatchEvent.from([
         // Update this field
-        set(newValue, clickedFeaturedPath),
+        set(nextValue, clickedFeaturedPath),
         // Maybe update other fields
         ...otherFeaturedPaths.map((path) => set(false, path)),
       ])

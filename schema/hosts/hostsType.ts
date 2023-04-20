@@ -1,7 +1,7 @@
 import {defineField, defineType} from 'sanity'
-import HostsSelector from './HostsSelector'
+import {HostsInput} from './HostsInput'
 
-export default defineType({
+export const hostsType = defineType({
   name: 'hosts',
   type: 'array',
   of: [
@@ -11,5 +11,5 @@ export default defineType({
       to: [{type: 'person'}],
     }),
   ],
-  components: {input: HostsSelector},
+  components: {input: HostsInput},
 })

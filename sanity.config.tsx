@@ -6,8 +6,8 @@ import {Stack} from '@sanity/ui'
 import {schemaTypes} from './schema'
 import {routedToolPlugin} from './plugins/routedTool'
 import {structure} from './desk/structure'
-import Progress from './schema/progress/Progress'
-import ProgressDummy from './schema/progress/ProgressDummy'
+import {Progress} from './schema/progress/Progress'
+// import {Progress} from './schema/progress/ProgressDummy'
 import Padding from './components/Padding'
 
 export default defineConfig({

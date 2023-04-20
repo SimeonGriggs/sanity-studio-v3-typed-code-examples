@@ -13,7 +13,7 @@ type FieldProgress = {
   value: boolean
 }
 
-export default function Progress(props: ProgressProps) {
+export function Progress(props: ProgressProps) {
   const {members} = props
   const booleanFieldProgress = members.reduce<FieldProgress[]>((acc, member) => {
     const isFieldMember = member.kind === 'field' && member.field.schemaType.name === 'boolean'

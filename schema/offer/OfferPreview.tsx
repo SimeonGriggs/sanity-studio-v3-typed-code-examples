@@ -1,4 +1,4 @@
-import React, {PropsWithChildren} from 'react'
+import {useMemo, PropsWithChildren} from 'react'
 import {Badge, Flex, Box, BadgeProps} from '@sanity/ui'
 import {PreviewProps} from 'sanity'
 
@@ -7,14 +7,14 @@ type CastPreviewProps = PreviewProps & {
   validUntil?: string
 }
 
-export default function OfferPreview(props: PreviewProps) {
+export function OfferPreview(props: PreviewProps) {
   // Item previews don't have access to the field's value or path
   // So we are passing in non-standard props in the schema
   // And recasting the type here to match
   const castProps = props as CastPreviewProps
   const {discount, validUntil} = castProps
 
-  const badgeProps: (PropsWithChildren & BadgeProps) | null = React.useMemo(() => {
+  const badgeProps: (PropsWithChildren & BadgeProps) | null = useMemo(() => {
     if (!validUntil) {
       return null
     }

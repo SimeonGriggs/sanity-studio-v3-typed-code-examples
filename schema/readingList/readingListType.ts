@@ -1,7 +1,7 @@
 import {defineField, defineType, isKeyedObject} from 'sanity'
-import {Recommendation} from './recommendation'
+import {Recommendation} from './recommendationType'
 
-export default defineType({
+export const readingListType = defineType({
   name: 'readingList',
   type: 'document',
   fields: [

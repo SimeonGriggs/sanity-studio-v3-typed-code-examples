@@ -1,6 +1,6 @@
 import {defineType, defineField} from 'sanity'
 
-export default defineType({
+export const preflightType = defineType({
   name: 'preflight',
   type: 'document',
   fields: [

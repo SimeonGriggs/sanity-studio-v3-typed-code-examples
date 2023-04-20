@@ -1,6 +1,6 @@
 import {defineField, defineType} from 'sanity'
 
-export default defineType({
+export const seminarType = defineType({
   name: 'seminar',
   type: 'document',
   fields: [

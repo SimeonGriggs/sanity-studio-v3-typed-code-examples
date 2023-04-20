@@ -1,8 +1,8 @@
 import {defineField, defineType} from 'sanity'
 import {TagIcon} from '@sanity/icons'
-import OfferPreview from './OfferPreview'
+import {OfferPreview} from './OfferPreview'
 
-export default defineType({
+export const offerType = defineType({
   name: 'offer',
   type: 'object',
   icon: TagIcon,

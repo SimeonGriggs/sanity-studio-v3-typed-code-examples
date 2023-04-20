@@ -1,13 +1,13 @@
 import {Box, Button, Code, Flex} from '@sanity/ui'
-import React from 'react'
 import type {StringInputProps} from 'sanity'
 import {set} from 'sanity'
+import {useCallback} from 'react'
 
 export function CouponInput(props: StringInputProps) {
   // onChange handles patches to this field
   const {onChange} = props
 
-  const generateCoupon = React.useCallback(() => {
+  const generateCoupon = useCallback(() => {
     const coupon = Math.random().toString(36).substring(2, 6).toUpperCase()
     // "set()" will write a value to this field, if a "path" parameter is not supplied
     onChange(set(coupon))

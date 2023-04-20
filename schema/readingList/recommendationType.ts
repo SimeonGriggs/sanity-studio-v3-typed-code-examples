@@ -1,6 +1,6 @@
 import {Reference, defineField, defineType} from 'sanity'
 import {BookIcon} from '@sanity/icons'
-import FeaturedItem from './FeaturedItem'
+import {RecommendationItem} from './RecommendationItem'
 
 export type Recommendation = {
   _key: string
@@ -8,7 +8,7 @@ export type Recommendation = {
   featured?: boolean
 }
 
-export default defineType({
+export const recommendationType = defineType({
   name: 'recommendation',
   type: 'object',
   fields: [
@@ -36,5 +36,5 @@ export default defineType({
       media: BookIcon,
     }),
   },
-  components: {item: FeaturedItem},
+  components: {item: RecommendationItem},
 })

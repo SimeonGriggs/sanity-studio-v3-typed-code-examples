@@ -9,8 +9,8 @@ export function RatingInput(props: NumberInputProps) {
 
   const handleScore = useCallback(
     (event: React.MouseEvent<HTMLButtonElement>) => {
-      const newValue = Number(event.currentTarget.value)
-      onChange(set(newValue))
+      const nextValue = Number(event.currentTarget.value)
+      onChange(set(nextValue))
     },
     [onChange]
   )
