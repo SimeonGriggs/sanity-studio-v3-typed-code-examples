@@ -1,6 +1,6 @@
 import {Box, Stack, Button, Flex, Grid} from '@sanity/ui'
 import {ObjectInputMember, ObjectInputProps, set} from 'sanity'
-import React from 'react'
+import {useCallback} from 'react'
 
 type DurationValue = {
   _type?: 'duration'
@@ -11,10 +11,10 @@ type DurationValue = {
 const DEFAULT_START = '09:00'
 const DEFAULT_END = '17:00'
 
-export default function DurationInput(props: ObjectInputProps<DurationValue>) {
+export function DurationInput(props: ObjectInputProps<DurationValue>) {
   const {onChange, members} = props
 
-  const handleChange = React.useCallback(
+  const handleChange = useCallback(
     (event: React.MouseEvent<HTMLButtonElement>) => {
       const {name, value} = event.currentTarget
 

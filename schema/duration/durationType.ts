@@ -1,18 +1,18 @@
 import {defineField, defineType} from 'sanity'
-import DurationInput from './DurationInput'
+import {DurationInput} from './DurationInput'
 
-export default defineType({
+export const durationType = defineType({
   name: 'duration',
   description: 'A start and finish time for a promotion',
   type: 'object',
   fields: [
     defineField({
       name: 'start',
-      type: 'timeIncrement',
+      type: 'timeValue',
     }),
     defineField({
       name: 'end',
-      type: 'timeIncrement',
+      type: 'timeValue',
     }),
   ],
   options: {columns: 2},

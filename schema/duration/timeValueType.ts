@@ -11,8 +11,8 @@ export const ALLOWED_TIMES = () => {
   return times
 }
 
-export default defineType({
-  name: 'timeIncrement',
+export const timeValueType = defineType({
+  name: 'timeValue',
   type: 'string',
   options: {
     list: ALLOWED_TIMES(),

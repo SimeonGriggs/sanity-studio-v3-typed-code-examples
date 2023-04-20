@@ -4,9 +4,9 @@ import {storeType} from './coupon/storeType'
 import {featureType} from './plan/featureType'
 import {planType} from './plan/planType'
 import location from './location'
-import duration from './duration/promotion'
-import promotion from './duration/duration'
-import timeIncrement from './duration/timeIncrement'
+import {promotionType} from './duration/promotionType'
+import {durationType} from './duration/durationType'
+import {timeValueType} from './duration/timeValueType'
 import {surveyType} from './rating/surveyType'
 import report from './report'
 import {tableSchema} from './table'
@@ -32,9 +32,9 @@ export const schemaTypes = [
   surveyType,
   ratingType,
   // Custom object example
-  promotion,
-  duration,
-  timeIncrement,
+  promotionType,
+  durationType,
+  timeValueType,
   // Decorated array example
   seminar,
   hosts,
