@@ -1,7 +1,9 @@
-import {ObjectMember} from 'sanity'
-import {Flex, Card, Box} from '@sanity/ui'
+// ./schema/preflight/Progress.tsx
 
-type ProgressProps = {
+import {ObjectInputProps, ObjectMember} from 'sanity'
+import {Flex, Card, Box, Stack} from '@sanity/ui'
+
+interface ProgressProps extends ObjectInputProps {
   members: ObjectMember[]
 }
 
@@ -26,12 +28,16 @@ export function Progress(props: ProgressProps) {
   const isComplete = completeCount === totalCount
 
   return (
-    <Card tone={isComplete ? `positive` : `transparent`} border padding={3} radius={2}>
-      <Flex align="center" gap={3}>
-        <Box>
-          {completeCount} / {totalCount} Tasks Complete
-        </Box>
-      </Flex>
-    </Card>
+    <Stack space={4}>
+      <Card tone={isComplete ? `positive` : `transparent`} border padding={3} radius={2}>
+        <Flex align="center" gap={3}>
+          <Box>
+            {completeCount} / {totalCount} Tasks Complete
+          </Box>
+        </Flex>
+      </Card>
+      {/* Render the default form */}
+      {props.renderDefault(props)}
+    </Stack>
   )
 }

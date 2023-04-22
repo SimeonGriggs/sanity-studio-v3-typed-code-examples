@@ -30,15 +30,7 @@ export default defineConfig({
           isObjectInputProps(props) &&
           props.schemaType.name === 'preflight'
         ) {
-          return (
-            <Padding>
-              <Stack space={4}>
-                <Progress members={props.members} />
-                {/* <ProgressDummy members={props.members} /> */}
-                {props.renderDefault(props)}
-              </Stack>
-            </Padding>
-          )
+          return <Padding>{Progress(props)}</Padding>
         } else if (props.id === 'root') {
           return <Padding>{props.renderDefault(props)}</Padding>
         }
