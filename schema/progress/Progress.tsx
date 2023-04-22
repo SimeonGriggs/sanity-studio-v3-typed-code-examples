@@ -1,10 +1,12 @@
-import {ObjectMember, TextWithTone} from 'sanity'
-import {Flex, Card, Box} from '@sanity/ui'
+// ./schema/preflight/Progress.tsx
+
+import {ObjectInputProps, ObjectMember, TextWithTone} from 'sanity'
+import {Flex, Card, Box, Stack} from '@sanity/ui'
 import {hues} from '@sanity/color'
 import {CircularProgressbarWithChildren} from 'react-circular-progressbar'
 import 'react-circular-progressbar/dist/styles.css'
 
-type ProgressProps = {
+interface ProgressProps extends ObjectInputProps {
   members: ObjectMember[]
 }
 
@@ -30,26 +32,30 @@ export function Progress(props: ProgressProps) {
   const percentage = Math.round((completeCount / totalCount) * 100)
 
   return (
-    <Card tone={isComplete ? `positive` : `transparent`} border padding={3} radius={2}>
-      <Flex align="center" gap={3}>
-        <Box style={{maxWidth: 70}}>
-          <CircularProgressbarWithChildren
-            value={percentage}
-            styles={{
-              path: {stroke: hues.green[500].hex},
-              trail: {stroke: hues.gray[100].hex},
-              text: {fill: hues.green[500].hex},
-            }}
-          >
-            <TextWithTone tone={isComplete ? `positive` : `default`} size={2} weight="semibold">
-              {percentage}%
-            </TextWithTone>
-          </CircularProgressbarWithChildren>
-        </Box>
-        <Box>
-          {completeCount} / {totalCount} Tasks Complete
-        </Box>
-      </Flex>
-    </Card>
+    <Stack space={4}>
+      <Card tone={isComplete ? `positive` : `transparent`} border padding={3} radius={2}>
+        <Flex align="center" gap={3}>
+          <Box style={{maxWidth: 70}}>
+            <CircularProgressbarWithChildren
+              value={percentage}
+              styles={{
+                path: {stroke: hues.green[500].hex},
+                trail: {stroke: hues.gray[100].hex},
+                text: {fill: hues.green[500].hex},
+              }}
+            >
+              <TextWithTone tone={isComplete ? `positive` : `default`} size={2} weight="semibold">
+                {percentage}%
+              </TextWithTone>
+            </CircularProgressbarWithChildren>
+          </Box>
+          <Box>
+            {completeCount} / {totalCount} Tasks Complete
+          </Box>
+        </Flex>
+      </Card>
+      {/* Render the default form */}
+      {props.renderDefault(props)}
+    </Stack>
   )
 }

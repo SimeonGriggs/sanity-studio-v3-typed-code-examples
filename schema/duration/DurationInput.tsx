@@ -42,14 +42,15 @@ export function DurationInput(props: ObjectInputProps<DurationValue>) {
     [onChange, props.value?._type]
   )
 
-  const startMember = members.find((m) => m.kind === 'field' && m.name === 'start')
-  const endMember = members.find((m) => m.kind === 'field' && m.name === 'end')
+  const startMember = members.find((member) => member.kind === 'field' && member.name === 'start')
+  const endMember = members.find((member) => member.kind === 'field' && member.name === 'end')
 
   if (!startMember || !endMember) {
     console.error(`Missing "start" or "end" member in DurationInput: "${props.schemaType.name}"`)
     return props.renderDefault(props)
   }
 
+  // Pass along functions to each member so that it knows how to render
   const renderProps = {
     renderField: props.renderField,
     renderInput: props.renderInput,

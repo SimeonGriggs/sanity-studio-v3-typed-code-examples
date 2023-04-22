@@ -16,12 +16,16 @@ export function HostsInput(props: ArrayOfObjectsInputProps) {
       // Find the value of the button, the department name
       const department = event.currentTarget.value
 
-      const query = `*[_type == "person" && department == $department]._id`
+      const query = `*[
+        _type == "person" && 
+        department == $department && 
+        !(_id in path("drafts.**")
+      ]._id`
       const peopleIds: string[] = (await client.fetch(query, {department})) ?? []
       const peopleReferences: Reference[] = peopleIds.map((personId) => ({
         _key: randomKey(12),
         _type: `host`,
-        _ref: personId.replace(`drafts.`, ``),
+        _ref: personId,
       }))
 
       // Individually "insert" items to append to the end of the array
