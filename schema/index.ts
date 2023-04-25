@@ -20,6 +20,7 @@ import {offerType} from './offer/offerType'
 import report from './report'
 import coordinate from './coordinate'
 import location from './location'
+import {arrayFunctionsType} from './arrayFunctions/arrayFunctionsType'
 
 export const schemaTypes = [
   // Custom string generator example
@@ -46,6 +47,8 @@ export const schemaTypes = [
   // Rich array item preview example
   campaignType,
   offerType,
+  // arrayFunctions example
+  arrayFunctionsType,
   // Complex examples:
   // Custom object example
   location,
