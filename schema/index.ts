@@ -21,6 +21,9 @@ import report from './report'
 import coordinate from './coordinate'
 import location from './location'
 import {arrayFunctionsType} from './arrayFunctions/arrayFunctionsType'
+import {shoppingListItemType} from './shoppingList/listItemType'
+import {shoppingListType} from './shoppingList/shoppingListType'
+import {listType} from './shoppingList/listType'
 
 export const schemaTypes = [
   // Custom string generator example
@@ -56,6 +59,10 @@ export const schemaTypes = [
   // Custom array of objects example
   report,
   tableSchema,
+  // Array multi-select example
+  shoppingListItemType,
+  shoppingListType,
+  listType,
   // Root level
   preflightType,
 ]

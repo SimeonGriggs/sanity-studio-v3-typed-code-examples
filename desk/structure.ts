@@ -28,6 +28,9 @@ export const structure: StructureResolver = (S) =>
       // Showcases an array with customized arrayFunctions
       S.documentTypeListItem('arrayFunctions').title('Array Functions'),
       S.divider(),
+      // Showcases an array with multi-select
+      S.documentTypeListItem('list').title('List (Array multi-select)'),
+      S.divider(),
       // A root-level component
       S.documentTypeListItem('preflight').title('Preflight (Root level)'),
       S.divider(),
