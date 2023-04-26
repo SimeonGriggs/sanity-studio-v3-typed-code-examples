@@ -1,9 +1,9 @@
 import {ObjectItemProps} from 'sanity'
-import {CheckmarkCircleIcon} from '@sanity/icons'
-import {Card, Flex, Box, Button} from '@sanity/ui'
+import {CheckmarkCircleIcon, CircleIcon} from '@sanity/icons'
+import {Text, Card, Flex, Box, Button} from '@sanity/ui'
+import {MouseEvent, useCallback} from 'react'
 import {ListItemValue} from './types'
 import {useMultiSelectContext} from './MultiSelectContext'
-import {MouseEvent, useCallback} from 'react'
 
 export function ListItemItem(props: ObjectItemProps<ListItemValue>) {
   const {selected, toggleSelected} = useMultiSelectContext()
@@ -17,14 +17,19 @@ export function ListItemItem(props: ObjectItemProps<ListItemValue>) {
   )
 
   return (
-    <Card tone={isSelected ? `primary` : `default`}>
-      <Flex align="center" paddingLeft={2}>
+    <Card paddingLeft={2}>
+      <Flex align="center">
         <Button
+          tone={isSelected ? `primary` : `default`}
           value={props.value._key}
-          icon={CheckmarkCircleIcon}
-          mode="bleed"
+          mode={isSelected ? `ghost` : `bleed`}
           onClick={handleClick}
-        />
+          padding={2}
+          style={{borderRadius: `50%`, aspectRatio: `1/1`}}
+          //   icon={isSelected ? CheckmarkCircleIcon : CircleIcon}
+        >
+          <Text size={3}>{isSelected ? <CheckmarkCircleIcon /> : <CircleIcon />}</Text>
+        </Button>
         <Box flex={1}>{props.renderDefault(props)}</Box>
       </Flex>
     </Card>
