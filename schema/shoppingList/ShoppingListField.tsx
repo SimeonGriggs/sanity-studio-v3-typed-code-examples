@@ -1,10 +1,12 @@
 import {useCallback, useState} from 'react'
-import {ArrayOfObjectsInputProps} from 'sanity'
+import {ObjectFieldProps, ArrayFieldProps} from 'sanity'
+import {Button} from '@sanity/ui'
+import {EllipsisVerticalIcon} from '@sanity/icons'
 
 import {MultiSelectProvider} from './MultiSelectContext'
-import {MultiSelectFunctions} from './MultiSelectFunctions'
+import {MultiSelectActions} from './MultiSelectActions'
 
-export function ShoppingListInput(props: ArrayOfObjectsInputProps) {
+export function ShoppingListField(props: ArrayFieldProps) {
   const [selected, setSelected] = useState<string[]>([])
 
   const toggleSelected = useCallback((key: string) => {
@@ -19,7 +21,10 @@ export function ShoppingListInput(props: ArrayOfObjectsInputProps) {
 
   return (
     <MultiSelectProvider selected={selected} toggleSelected={toggleSelected} selectAll={selectAll}>
-      {props.renderDefault({...props, arrayFunctions: MultiSelectFunctions})}
+      {props.renderDefault({
+        ...props,
+        actions: <MultiSelectActions {...props} />,
+      })}
     </MultiSelectProvider>
   )
 }

@@ -1,5 +1,5 @@
 import {defineField, defineType} from 'sanity'
-import {ShoppingListInput} from './ShoppingListInput'
+import {ShoppingListField} from './ShoppingListField'
 
 export const shoppingListType = defineType({
   name: 'shoppingList',
@@ -11,6 +11,6 @@ export const shoppingListType = defineType({
     }),
   ],
   components: {
-    input: ShoppingListInput,
+    field: ShoppingListField,
   },
 })
