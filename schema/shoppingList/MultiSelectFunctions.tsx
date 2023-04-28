@@ -159,7 +159,6 @@ export function MultiSelectFunctions(props: ArrayOfObjectsInputProps) {
             disabled={readOnly || !selected.length || !value || !value.length}
             onClick={handleRemoveSelected}
           />
-          <MenuDivider />
           <MenuItem
             icon={TrashIcon}
             text="Remove all"
