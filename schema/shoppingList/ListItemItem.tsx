@@ -34,7 +34,7 @@ export function ListItemItem(props: ObjectItemProps<ListItemValue>) {
         <CircleButton
           tone={isSelected ? `primary` : `default`}
           value={props.value._key}
-          mode={isSelected ? `ghost` : `bleed`}
+          mode={isSelected ? `default` : `bleed`}
           onClick={handleClick}
           padding={2}
         >
@@ -44,7 +44,7 @@ export function ListItemItem(props: ObjectItemProps<ListItemValue>) {
         {collapsed ? (
           <Box flex={1}>{props.renderDefault(props)}</Box>
         ) : (
-          <Box flex={1} padding={2}>
+          <Box flex={1} paddingLeft={3} padding={2}>
             <Stack space={4}>
               {members.map((member) => (
                 <ObjectInputMember key={member.key} member={member} {...renderProps} />

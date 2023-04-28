@@ -1,5 +1,5 @@
 import {useCallback} from 'react'
-import {Flex, Button, Menu, MenuButton, MenuItem, MenuDivider, Box} from '@sanity/ui'
+import {Button, Menu, MenuButton, MenuItem, MenuDivider} from '@sanity/ui'
 import {
   TrashIcon,
   EllipsisVerticalIcon,
@@ -9,14 +9,7 @@ import {
   RemoveCircleIcon,
   ClipboardIcon,
 } from '@sanity/icons'
-import {
-  ArrayOfObjectsFunctions,
-  ArrayOfObjectsInputProps,
-  PatchEvent,
-  insert,
-  unset,
-  useWorkspace,
-} from 'sanity'
+import {ArrayOfObjectsInputProps, insert, unset, useWorkspace} from 'sanity'
 import {randomKey} from '@sanity/util/content'
 import {useLocalStorage} from 'usehooks-ts'
 
@@ -48,15 +41,17 @@ export function MultiSelectFunctions(props: ArrayOfObjectsInputProps) {
 
     const parsedItems = JSON.parse(copiedItems) as ListItemValue[]
 
+    if (!Array.isArray(parsedItems) || !parsedItems.length) {
+      return
+    }
+
     onChange(
-      PatchEvent.from(
-        parsedItems.map((item) =>
-          insert(
-            // New key for new item
-            [{...item, _key: randomKey(12)}],
-            'after',
-            [-1]
-          )
+      parsedItems.map((item) =>
+        insert(
+          // New key for new item
+          [{...item, _key: randomKey(12)}],
+          'after',
+          [-1]
         )
       )
     )
@@ -81,16 +76,14 @@ export function MultiSelectFunctions(props: ArrayOfObjectsInputProps) {
     const selectedValues = value.filter((item) => selected.includes(item._key))
 
     onChange(
-      PatchEvent.from(
-        selectedValues.map((item) =>
-          insert(
-            // New key for new item
-            [{...item, _key: randomKey(12)}],
-            // position
-            'after',
-            // Old key for insert position
-            [{_key: item._key}]
-          )
+      selectedValues.map((item) =>
+        insert(
+          // New key for new item
+          [{...item, _key: randomKey(12)}],
+          // position
+          'after',
+          // Old key for insert position
+          [{_key: item._key}]
         )
       )
     )
@@ -102,7 +95,7 @@ export function MultiSelectFunctions(props: ArrayOfObjectsInputProps) {
     }
 
     const selectedAsKeys = selected.map((key) => ({_key: key}))
-    onChange(PatchEvent.from(selectedAsKeys.map((path) => unset([path]))))
+    onChange(selectedAsKeys.map((path) => unset([path])))
   }, [onChange, selected])
 
   const handleRemoveAll = useCallback(() => {
@@ -111,7 +104,7 @@ export function MultiSelectFunctions(props: ArrayOfObjectsInputProps) {
     }
 
     const valueKeys = value.map(({_key}) => ({_key}))
-    onChange(PatchEvent.from(valueKeys.map((path) => unset([path]))))
+    onChange(valueKeys.map((path) => unset([path])))
   }, [onChange, value])
 
   return (
