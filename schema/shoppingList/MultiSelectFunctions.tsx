@@ -7,25 +7,60 @@ import {
   CopyIcon,
   CheckmarkCircleIcon,
   RemoveCircleIcon,
+  ClipboardIcon,
 } from '@sanity/icons'
 import {
-  ArrayInputFunctionsProps,
   ArrayOfObjectsFunctions,
-  ArraySchemaType,
+  ArrayOfObjectsInputProps,
   PatchEvent,
   insert,
   unset,
+  useWorkspace,
 } from 'sanity'
 import {randomKey} from '@sanity/util/content'
+import {useLocalStorage} from 'usehooks-ts'
 
 import {useMultiSelectContext} from './MultiSelectContext'
 import {ListItemValue} from './types'
 
-export function MultiSelectFunctions(
-  props: ArrayInputFunctionsProps<ListItemValue, ArraySchemaType>
-) {
+export function MultiSelectFunctions(props: ArrayOfObjectsInputProps) {
   const {value, onChange, readOnly} = props
   const {selected, selectAll} = useMultiSelectContext()
+  const {projectId, dataset} = useWorkspace()
+
+  const localStorageId = `multi-select-${projectId}-${dataset}-${props.schemaType.type?.name}`
+  const [copiedItems, setCopiedItems] = useLocalStorage(localStorageId, ``)
+
+  const handleCopySelected = useCallback(() => {
+    if (!selected.length || !value || !value.length) {
+      return
+    }
+
+    const selectedValues = value.filter((item) => selected.includes(item._key))
+
+    setCopiedItems(JSON.stringify(selectedValues))
+  }, [selected, setCopiedItems, value])
+
+  const handlePaste = useCallback(() => {
+    if (!copiedItems) {
+      return
+    }
+
+    const parsedItems = JSON.parse(copiedItems) as ListItemValue[]
+
+    onChange(
+      PatchEvent.from(
+        parsedItems.map((item) =>
+          insert(
+            // New key for new item
+            [{...item, _key: randomKey(12)}],
+            'after',
+            [-1]
+          )
+        )
+      )
+    )
+  }, [copiedItems, onChange])
 
   const handleSelectAll = useCallback(() => {
     const keys = value && value.length ? value.map((item) => item._key) : null
@@ -80,53 +115,68 @@ export function MultiSelectFunctions(
   }, [onChange, value])
 
   return (
-    <Flex align="center" gap={1}>
-      <Box flex={1}>
-        <ArrayOfObjectsFunctions {...props} />
-      </Box>
-      <MenuButton
-        button={<Button mode="ghost" icon={EllipsisVerticalIcon} disabled={readOnly} />}
-        id="multi-select-menu"
-        menu={
-          <Menu>
-            <MenuItem
-              text="Select all"
-              icon={CheckmarkCircleIcon}
-              onClick={handleSelectAll}
-              disabled={readOnly || !value || !value.length}
-            />
-            <MenuItem
-              text="Clear selection"
-              icon={ResetIcon}
-              onClick={handleSelectNone}
-              disabled={readOnly || !selected.length || !value || !value.length}
-            />
-            <MenuItem
-              text="Duplicate selected"
-              icon={CopyIcon}
-              onClick={handleDuplicateSelected}
-              disabled={readOnly || !selected.length || !value || !value.length}
-            />
-            <MenuDivider />
-            <MenuItem
-              icon={RemoveCircleIcon}
-              text="Remove selected"
-              tone="critical"
-              disabled={readOnly || !selected.length || !value || !value.length}
-              onClick={handleRemoveSelected}
-            />
-            <MenuDivider />
-            <MenuItem
-              icon={TrashIcon}
-              text="Remove all"
-              tone="critical"
-              onClick={handleRemoveAll}
-              disabled={readOnly || !value || !value.length}
-            />
-          </Menu>
-        }
-        popover={{portal: true}}
-      />
-    </Flex>
+    <MenuButton
+      button={
+        <Button
+          mode="ghost"
+          icon={EllipsisVerticalIcon}
+          disabled={readOnly}
+          text="More actions..."
+        />
+      }
+      id={`${localStorageId}-menu`}
+      menu={
+        <Menu>
+          <MenuItem
+            text="Select all"
+            icon={CheckmarkCircleIcon}
+            onClick={handleSelectAll}
+            disabled={readOnly || !value || !value.length}
+          />
+          <MenuItem
+            text="Clear selection"
+            icon={ResetIcon}
+            onClick={handleSelectNone}
+            disabled={readOnly || !selected.length || !value || !value.length}
+          />
+          <MenuItem
+            text="Duplicate selected"
+            icon={CopyIcon}
+            onClick={handleDuplicateSelected}
+            disabled={readOnly || !selected.length || !value || !value.length}
+          />
+          <MenuDivider />
+          <MenuItem
+            text="Copy selected"
+            icon={CopyIcon}
+            onClick={handleCopySelected}
+            disabled={readOnly || !selected.length || !value || !value.length}
+          />
+          <MenuItem
+            text="Paste items"
+            icon={ClipboardIcon}
+            onClick={handlePaste}
+            disabled={readOnly || !copiedItems}
+          />
+          <MenuDivider />
+          <MenuItem
+            icon={RemoveCircleIcon}
+            text="Remove selected"
+            tone="critical"
+            disabled={readOnly || !selected.length || !value || !value.length}
+            onClick={handleRemoveSelected}
+          />
+          <MenuDivider />
+          <MenuItem
+            icon={TrashIcon}
+            text="Remove all"
+            tone="critical"
+            onClick={handleRemoveAll}
+            disabled={readOnly || !value || !value.length}
+          />
+        </Menu>
+      }
+      popover={{portal: true}}
+    />
   )
 }

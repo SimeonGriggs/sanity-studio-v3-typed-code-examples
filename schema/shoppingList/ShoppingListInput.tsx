@@ -1,5 +1,6 @@
 import {useCallback, useState} from 'react'
 import {ArrayOfObjectsInputProps} from 'sanity'
+import {Stack} from '@sanity/ui'
 
 import {MultiSelectProvider} from './MultiSelectContext'
 import {MultiSelectFunctions} from './MultiSelectFunctions'
@@ -19,7 +20,10 @@ export function ShoppingListInput(props: ArrayOfObjectsInputProps) {
 
   return (
     <MultiSelectProvider selected={selected} toggleSelected={toggleSelected} selectAll={selectAll}>
-      {props.renderDefault({...props, arrayFunctions: MultiSelectFunctions})}
+      <Stack space={2}>
+        {props.renderDefault(props)}
+        <MultiSelectFunctions {...props} />
+      </Stack>
     </MultiSelectProvider>
   )
 }

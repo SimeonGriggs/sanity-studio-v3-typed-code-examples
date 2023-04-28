@@ -22,15 +22,15 @@ export const shoppingListItemType = defineType({
       subtitle: 'procured',
       _key: '_key',
     },
-    // prepare({title, subtitle}) {
-    //   return {
-    //     title,
-    //     subtitle: subtitle ? 'Procured' : 'Not procured',
-    //   }
-    // },
+    prepare({title, subtitle}) {
+      return {
+        title,
+        subtitle: subtitle ? 'Procured' : 'Not procured',
+      }
+    },
   },
   components: {
     item: ListItemItem,
-    preview: ListItemPreview,
+    // preview: ListItemPreview,
   },
 })
