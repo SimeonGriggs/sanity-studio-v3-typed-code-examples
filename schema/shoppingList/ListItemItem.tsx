@@ -19,7 +19,7 @@ export function ListItemItem(props: ObjectItemProps<ListItemValue>) {
     [toggleSelected]
   )
 
-  const {members = []} = props.inputProps
+  const {members} = props.inputProps
 
   const renderProps = {
     renderField: props.inputProps.renderField,
@@ -44,19 +44,20 @@ export function ListItemItem(props: ObjectItemProps<ListItemValue>) {
         {collapsed ? (
           <Box flex={1}>{props.renderDefault(props)}</Box>
         ) : (
-          <Box flex={1} paddingLeft={3} padding={2}>
-            <Stack space={4}>
+          <Box flex={1} paddingLeft={3} paddingRight={0} paddingTop={2} paddingBottom={3}>
+            <Stack space={3}>
               {members.map((member) => (
                 <ObjectInputMember key={member.key} member={member} {...renderProps} />
               ))}
             </Stack>
           </Box>
         )}
+
         <Box paddingX={2}>
           <Button
             title={collapsed ? 'Expand' : 'Collapse'}
             icon={collapsed ? ChevronDownIcon : ChevronUpIcon}
-            mode="bleed"
+            mode={collapsed ? 'bleed' : 'default'}
             onClick={() => setCollapsed((current) => !current)}
           />
         </Box>
